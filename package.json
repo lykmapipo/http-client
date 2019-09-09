@@ -1,7 +1,7 @@
 {
-  "name": "iso-lib-starter",
-  "version": "0.1.1",
-  "description": "Starter for creating reusable, modern, isomorphic javascript libraries using rollup",
+  "name": "@lykmapipo/http-client",
+  "version": "0.1.0",
+  "description": "Helper utilities for making HTTP(s) requests",
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
@@ -22,12 +22,15 @@
   },
   "keywords": [
     "lykmapipo",
-    "iso-lib-starter",
-    "isomophic"
+    "http",
+    "https",
+    "client",
+    "request",
+    "isomorphic"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lykmapipo/iso-lib-starter.git"
+    "url": "git+https://github.com/lykmapipo/http-client.git"
   },
   "author": {
     "name": "lykmapipo",
@@ -39,18 +42,13 @@
       "name": "lykmapipo",
       "email": "lallyelias87@gmail.com",
       "url": "https://github.com/lykmapipo"
-    },
-    {
-      "name": "Benson Maruchu",
-      "email": "benmaruchu@gmail.com",
-      "url": "https://github.com/BenMaruchu"
     }
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lykmapipo/iso-lib-starter/issues"
+    "url": "https://github.com/lykmapipo/http-client/issues"
   },
-  "homepage": "https://github.com/lykmapipo/iso-lib-starter#readme",
+  "homepage": "https://github.com/lykmapipo/http-client#readme",
   "devDependencies": {
     "@babel/cli": "^7.6.0",
     "@babel/core": "^7.6.0",
@@ -82,7 +80,7 @@
     "nyc": "^14.1.1",
     "prettier": "^1.18.2",
     "rimraf": "^3.0.0",
-    "rollup": "^1.21.1",
+    "rollup": "^1.21.2",
     "shelljs": "^0.8.3"
   },
   "peerDependencies": {},
