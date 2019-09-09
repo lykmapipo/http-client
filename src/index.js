@@ -56,3 +56,31 @@ export const disposeHttpClient = () => {
   httpClient = null;
   return httpClient;
 };
+
+/**
+ * @function request
+ * @name request
+ * @description Issue http get request using given options.
+ * @param {object} optns valid request options
+ * @returns {Promise} promise resolve with data on success or error on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const getUsers = request('/users');
+ * getUsers.then(users => { ... }).catch(error => { ... });
+ */
+export const request = optns => {
+  // ensure options
+  const options = withDefaults(optns);
+
+  // ensure http client
+  const client = createHttpClient(options);
+
+  // issue http(s) request
+  return client.request(options);
+};
