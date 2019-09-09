@@ -76,6 +76,7 @@
     "lint-staged": "^9.2.5",
     "lodash.template": "^4.5.0",
     "mocha": "^6.2.0",
+    "nock": "^11.3.3",
     "npm-check-updates": "^3.1.21",
     "nyc": "^14.1.1",
     "prettier": "^1.18.2",
@@ -85,6 +86,9 @@
   },
   "peerDependencies": {},
   "dependencies": {
+    "@lykmapipo/common": ">=0.26.1",
+    "@lykmapipo/env": ">=0.13.0",
+    "axios": ">=0.19.0",
     "lodash": ">=4.17.15"
   },
   "engines": {
