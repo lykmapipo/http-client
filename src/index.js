@@ -7,15 +7,18 @@ let httpClient;
 /**
  * @function createHttpClient
  * @name createHttpClient
- * @description create an http client if not exists
+ * @description Create http client if not exists
  * @param {object} [optns] valid http client options
- * @returns {object} new instance of http client
+ * @returns {object} instance of http client
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since 0.1.0
  * @version 0.1.0
  * @static
  * @public
  * @example
  *
+ * const optns = { baseUrl: ... };
  * const httpClient = createHttpClient();
  */
 export const createHttpClient = optns => {
