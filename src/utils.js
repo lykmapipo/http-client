@@ -36,7 +36,7 @@ export const withDefaults = optns => {
   // merge defaults
   const options = mergeObjects(
     {
-      baseUrl: getString('BASE_URL') || getString('REACT_APP_BASE_URL'),
+      baseURL: getString('BASE_URL') || getString('REACT_APP_BASE_URL'),
       headers: { Accept: CONTENT_TYPE, 'Content-Type': CONTENT_TYPE },
     },
     optns

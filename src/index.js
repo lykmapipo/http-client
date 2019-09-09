@@ -36,4 +36,34 @@ export const createHttpClient = optns => {
   return httpClient;
 };
 
-export const disposeHttpClient = () => {};
+/**
+ * @function disposeHttpClient
+ * @name disposeHttpClient
+ * @description reset current http client in use.
+ * @since 0.1.0
+ * @version 0.1.0
+ * @example
+ * import { disposeHttpClient } from 'emis-api-client';
+ * disposeHttpClient();
+ */
+
+/**
+ * @function disposeHttpClient
+ * @name disposeHttpClient
+ * @description Clear current http client in use.
+ * @returns {object} null if client clear otherwise existing client;
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const httpClient = disposeHttpClient();
+ * // => null
+ */
+export const disposeHttpClient = () => {
+  httpClient = null;
+  return httpClient;
+};
