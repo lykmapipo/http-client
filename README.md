@@ -1,47 +1,53 @@
-# iso-lib-starter
+# http-client
 
-[![Build Status](https://travis-ci.org/lykmapipo/iso-lib-starter.svg?branch=master)](https://travis-ci.org/lykmapipo/iso-lib-starter)
-[![Dependencies Status](https://david-dm.org/lykmapipo/iso-lib-starter.svg)](https://david-dm.org/lykmapipo/iso-lib-starter)
-[![Coverage Status](https://coveralls.io/repos/github/lykmapipo/iso-lib-starter/badge.svg?branch=master)](https://coveralls.io/github/lykmapipo/iso-lib-starter?branch=master)
-[![GitHub License](https://img.shields.io/github/license/lykmapipo/iso-lib-starter)](https://github.com/lykmapipo/iso-lib-starter/blob/master/LICENSE) 
+[![Build Status](https://travis-ci.org/lykmapipo/http-client.svg?branch=master)](https://travis-ci.org/lykmapipo/http-client)
+[![Dependencies Status](https://david-dm.org/lykmapipo/http-client.svg)](https://david-dm.org/lykmapipo/http-client)
+[![Coverage Status](https://coveralls.io/repos/github/lykmapipo/http-client/badge.svg?branch=master)](https://coveralls.io/github/lykmapipo/http-client?branch=master)
+[![GitHub License](https://img.shields.io/github/license/lykmapipo/http-client)](https://github.com/lykmapipo/http-client/blob/master/LICENSE) 
 
 [![Commitizen Friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Code Style](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
-[![npm version](https://img.shields.io/npm/v/@lykmapipo/iso-lib-starter)](https://www.npmjs.com/package/@lykmapipo/iso-lib-starter)
+[![npm version](https://img.shields.io/npm/v/@lykmapipo/http-client)](https://www.npmjs.com/package/@lykmapipo/http-client)
 
+Helper utilities for making HTTP(s) requests.
 
-Starter for creating reusable, modern, isomorphic javascript libraries using rollup.
+## Requirements
+
+- [NodeJS v12+](https://nodejs.org)
+- [Npm v6+](https://www.npmjs.com/)
+
+## Installation
+
+```sh
+npm install --save @lykmapipo/http-client
+```
 
 ## Usage
-- To get started, simply clone this repo:
-```sh
-$ git clone https://github.com/lykmapipo/iso-lib-starter.git
+
+```js
+import { get } from '@lykmapipo/http-client';
+
+get(url).then(response => { ... }).catch(error => { ... });
 ```
-- Remove `.git` directory
-```sh
-$ rm -rf .git
-```
-- Rename the new repo to the name of your library, and go through the `package.json` to fill out your own details as well.
-- Add usage and installation documentation
 
-## Testing
+## Test
 
-If you want to test this library,
+- Clone this repository
 
-- first clone this repo
 - Install all dependencies
 
-  ```sh
-  npm install
-  ```
+```sh
+npm install
+```
 
-- Run test
-  ```sh
-  npm test
-  ```
+- Then run test
 
-## How to contribute
+```sh
+npm test
+```
+
+## Contribute
 
 It will be nice, if you open an issue first so that we can know what is going on, then, fork this repo and push in your ideas. Do not forget to add a bit of test(s) of what value you adding.
 
