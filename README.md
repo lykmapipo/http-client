@@ -26,13 +26,19 @@ npm install --save @lykmapipo/http-client
 ## Usage
 
 ```js
-import { request, del, get } from '@lykmapipo/http-client';
+import { request, del, get, head, options } from '@lykmapipo/http-client';
 
 request({ url: '/users' }).then(response => { ... }).catch(error => { ... });
 
 del('/users/5c1766243').then(user => { ... }).catch(error => { ... });
 
+head('/users').then({ headers } => { ... }).catch(error => { ... });
+
+options('/users').then({ headers } => { ... }).catch(error => { ... });
+
 get('/users').then(users => { ... }).catch(error => { ... });
+
+get('/users/5c1766243').then(user => { ... }).catch(error => { ... });
 ```
 
 ## Test
