@@ -190,6 +190,33 @@ export const options = (url, optns = {}) => {
 };
 
 /**
+ * @function patch
+ * @name patch
+ * @description Issue http patch request to specified url.
+ * @param {string} url valid http path.
+ * @param {object} data request payload to be encoded on http request body
+ * @param {object} [optns={}] valid request options.
+ * @returns {Promise} promise resolve with data on success or error on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const patchUser = patch('/users', { age: 14 });
+ * patchUser.then(user => { ... }).catch(error => { ... });
+ */
+export const patch = (url, data, optns = {}) => {
+  if (isEmpty(data)) {
+    return Promise.reject(new Error('Missing Payload'));
+  }
+  const requestOptions = { method: 'PATCH', url, data, ...optns };
+  return wrapRequest(request(requestOptions));
+};
+
+/**
  * @function post
  * @name post
  * @description Issue http post request to specified url.

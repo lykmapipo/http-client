@@ -7,6 +7,7 @@ import {
   get,
   head,
   options,
+  patch,
   post,
   put,
 } from '../src';
@@ -119,6 +120,41 @@ describe('client shortcuts', () => {
       .catch(error => {
         done(error);
       });
+  });
+
+  it('should send http patch request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { age: 11 };
+    nock(process.env.BASE_URL)
+      .patch('/users/5c1766243')
+      .query(true)
+      .reply(200, data);
+
+    patch('/users/5c1766243', data)
+      .then(user => {
+        expect(user).to.exist;
+        expect(user).to.exist;
+        expect(user).to.be.eql(data);
+        done(null, user);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should reject send http patch request if no payload', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { age: 11 };
+    nock(process.env.BASE_URL)
+      .patch('/users/5c1766243')
+      .query(true)
+      .reply(200, data);
+
+    patch('/users/5c1766243', {}).catch(error => {
+      expect(error).to.exist;
+      expect(error.message).to.be.equal('Missing Payload');
+      done();
+    });
   });
 
   it('should send http post request', done => {
