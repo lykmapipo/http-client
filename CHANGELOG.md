@@ -1,0 +1,55 @@
+#### 0.1.0 (2019-09-11)
+
+##### Chores
+
+* **deps:**
+  *  force latest version & audit fix ([0998ecba](https://github.com/lykmapipo/http-client/commit/0998ecba277d86238b71faec2ebdae9841d85dbb))
+  *  add test helpers ([eb8aaa26](https://github.com/lykmapipo/http-client/commit/eb8aaa26ea7b47d60619d7f3a487f6863c9fe539))
+  *  add common modules ([78ded150](https://github.com/lykmapipo/http-client/commit/78ded150595467c4d084939629e7781aa5b837fc))
+* **examples:**  add get examples ([1c5b6139](https://github.com/lykmapipo/http-client/commit/1c5b61397a381141ecc2cd00b0d13062668eede7))
+* **package:**  improve keywords and description ([62149b97](https://github.com/lykmapipo/http-client/commit/62149b9710d49b3b30fc51b19bdc2451c0e2bfdf))
+
+##### Documentation Changes
+
+*  add patch shortcut usage ([41b39b74](https://github.com/lykmapipo/http-client/commit/41b39b74ae4e49b71be0d2c95268c6f2190ee1df))
+*  flag as work in progress ([212b3b3b](https://github.com/lykmapipo/http-client/commit/212b3b3be63d08892fa37ad43818f2dc4b44e1f3))
+*  add environment variable section ([7291a6f7](https://github.com/lykmapipo/http-client/commit/7291a6f7faf7498b5720c7e0ad7a60354eab0329))
+*  add post and put usage docs ([3813f90b](https://github.com/lykmapipo/http-client/commit/3813f90bd2541310b864f99cad2783edf4e6e4a3))
+*  update usage docs ([a097498a](https://github.com/lykmapipo/http-client/commit/a097498aa35fa963976d6dd6939d2fba79a12b81))
+*  update usage docs ([d48bc2fc](https://github.com/lykmapipo/http-client/commit/d48bc2fc506b780fbca595e8659176a7d42f6d3e))
+*  update usage ([83250e8c](https://github.com/lykmapipo/http-client/commit/83250e8caf31af4842fe992dcd01d5095f4190f0))
+*  update usage docs ([c57ba7fa](https://github.com/lykmapipo/http-client/commit/c57ba7fa71091ae8c1cc3479d008bb2af0ead778))
+
+##### New Features
+
+*  implement patch http path shortcut ([309c4003](https://github.com/lykmapipo/http-client/commit/309c4003857b0feef9acad566a7c40ab44114195))
+*  implemet http put shortcut ([2285ada6](https://github.com/lykmapipo/http-client/commit/2285ada600be06d6bfb25e7c8ec2408de9a3bef2))
+*  implement http post shortcut ([8b64ed15](https://github.com/lykmapipo/http-client/commit/8b64ed15bbf2dc9b63cb70fd6d2f9e8c0cc4fa8b))
+*  implement http options shortcut ([6c2b1f82](https://github.com/lykmapipo/http-client/commit/6c2b1f824d2b5110425c39f984b275bf2ba05169))
+*  implement head http shortcut ([86264461](https://github.com/lykmapipo/http-client/commit/86264461d99c0af9e9dc5202932cc37b48de967c))
+*  add http delete shortcut ([2f81d607](https://github.com/lykmapipo/http-client/commit/2f81d6079295d305c5e63bfc35317c4b88ccff80))
+*  add http get shortcut ([c66fa5c7](https://github.com/lykmapipo/http-client/commit/c66fa5c70ec27a4a7cb5e893c82510e3bd463452))
+*  add raw request helper ([e89073eb](https://github.com/lykmapipo/http-client/commit/e89073eb9116da721ceb98ea09328c2d15d1d4d8))
+*  implement client create and dispose ([9d1c762a](https://github.com/lykmapipo/http-client/commit/9d1c762ab8af3270454f4a35fb2255892afa7c35))
+*  option preparation helper ([998f4f36](https://github.com/lykmapipo/http-client/commit/998f4f36bb1b10f2e0d6eb60e8c7b582837ddb47))
+* **utils:**
+  *  add wrap request helper ([8ca46cc8](https://github.com/lykmapipo/http-client/commit/8ca46cc8c357bc587b82db0d8ce1daf81723e918))
+  *  add map response to error ([fa53b4ee](https://github.com/lykmapipo/http-client/commit/fa53b4ee2a922137ca98d37b176497e0cf088e1d))
+  *  add map response to data ([11747a26](https://github.com/lykmapipo/http-client/commit/11747a263fb5318f0a8578cbcacdd27f7eee5913))
+
+##### Refactors
+
+*  improve get and delete http verb helpers ([20b0b4c9](https://github.com/lykmapipo/http-client/commit/20b0b4c9c38df854a9ec09ccdb24b86691665f55))
+*  extract helpers to utils ([9d884b8e](https://github.com/lykmapipo/http-client/commit/9d884b8e7c1c92429525c200ad994a615ce21af9))
+
+##### Code Style Changes
+
+*  improve raw request jsdoc ([8c41f5e0](https://github.com/lykmapipo/http-client/commit/8c41f5e0d74a1688c9ff207211a4118d9768686a))
+*  remove unused jsdocs ([c0a89929](https://github.com/lykmapipo/http-client/commit/c0a899299b34fe1935a30e702bdfcd7411aca793))
+*  improve jsdocs ([a72eac96](https://github.com/lykmapipo/http-client/commit/a72eac96c184d43cd943cfbcb6aadb34a01ba98e))
+
+##### Tests
+
+* **utils:**  improve test coverage ([8926046d](https://github.com/lykmapipo/http-client/commit/8926046df02e4a9138a5f56c0bfd97494f106438))
+*  setup boostraping ([077c671c](https://github.com/lykmapipo/http-client/commit/077c671cbe0090a5b44c050e9d78f2e8576168ea))
+
