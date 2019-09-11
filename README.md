@@ -45,6 +45,11 @@ post('/users', data).then(user => { ... }).catch(error => { ... });
 put('/users/5c1766243', data).then(user => { ... }).catch(error => { ... });
 ```
 
+## Environment
+```js
+BASE_URL=https://127.0.0.1/v1/
+```
+
 ## Test
 
 - Clone this repository
