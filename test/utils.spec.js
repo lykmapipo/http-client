@@ -56,27 +56,79 @@ describe('client utils', () => {
     expect(error.code).to.be.equal(400);
     expect(error.message).to.be.equal(rawResponse.message);
     expect(error.description).to.be.equal('Bad Request');
+
+    rawResponse = { description: 'Request Failed' };
+    error = mapResponseToError(rawResponse);
+    expect(error).to.exist.and.be.an.instanceof(Error);
+    expect(error.status).to.be.equal(400);
+    expect(error.code).to.be.equal(400);
+    expect(error.message).to.be.equal(rawResponse.description);
+    expect(error.description).to.be.equal(rawResponse.description);
+
+    rawResponse = { message: 'Request Failed', description: 'Bad Request' };
+    error = mapResponseToError(rawResponse);
+    expect(error).to.exist.and.be.an.instanceof(Error);
+    expect(error.status).to.be.equal(400);
+    expect(error.code).to.be.equal(400);
+    expect(error.message).to.be.equal(rawResponse.message);
+    expect(error.description).to.be.equal(rawResponse.description);
   });
 
   it('should map response to error on server no response', () => {
-    const rawResponse = { message: 'Request Failed', request: {} };
-    const error = mapResponseToError(rawResponse);
+    let rawResponse = { message: 'Request Failed', request: {} };
+    let error = mapResponseToError(rawResponse);
     expect(error).to.exist.and.be.an.instanceof(Error);
     expect(error.status).to.be.equal(503);
     expect(error.code).to.be.equal(503);
     expect(error.message).to.be.equal(rawResponse.message);
     expect(error.description).to.be.equal('Service Unavailable');
+
+    rawResponse = {
+      description: 'Service Unavailable',
+      request: {},
+    };
+    error = mapResponseToError(rawResponse);
+    expect(error).to.exist.and.be.an.instanceof(Error);
+    expect(error.status).to.be.equal(503);
+    expect(error.code).to.be.equal(503);
+    expect(error.message).to.be.equal(rawResponse.description);
+    expect(error.description).to.be.equal(rawResponse.description);
+
+    rawResponse = {
+      message: 'Request Failed',
+      description: 'Service Unavailable',
+      request: {},
+    };
+    error = mapResponseToError(rawResponse);
+    expect(error).to.exist.and.be.an.instanceof(Error);
+    expect(error.status).to.be.equal(503);
+    expect(error.code).to.be.equal(503);
+    expect(error.message).to.be.equal(rawResponse.message);
+    expect(error.description).to.be.equal(rawResponse.description);
   });
 
   it('should map response to error on server response', () => {
-    const rawResponse = {
+    let rawResponse = {
       message: 'Cast Error',
       response: { code: 400, status: 400 },
     };
-    const error = mapResponseToError(rawResponse);
+    let error = mapResponseToError(rawResponse);
     expect(error).to.exist.and.be.an.instanceof(Error);
     expect(error.status).to.be.equal(rawResponse.response.code);
     expect(error.code).to.be.equal(rawResponse.response.status);
+    expect(error.message).to.be.equal(rawResponse.message);
+    expect(error.description).to.be.equal(rawResponse.message);
+
+    rawResponse = {
+      code: 400,
+      status: 400,
+      message: 'Cast Error',
+      response: {},
+    };
+    error = mapResponseToError(rawResponse);
+    expect(error).to.exist.and.be.an.instanceof(Error);
+    expect(error.status).to.be.equal(rawResponse.code);
+    expect(error.code).to.be.equal(rawResponse.status);
     expect(error.message).to.be.equal(rawResponse.message);
     expect(error.description).to.be.equal(rawResponse.message);
   });
