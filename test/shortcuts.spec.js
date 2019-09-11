@@ -1,6 +1,6 @@
 import nock from 'nock';
 import { expect } from '@lykmapipo/test-helpers';
-import { disposeHttpClient, request, del, head, get } from '../src';
+import { disposeHttpClient, request, del, get, head, options } from '../src';
 
 describe('client shortcuts', () => {
   beforeEach(() => {
@@ -49,6 +49,25 @@ describe('client shortcuts', () => {
       });
   });
 
+  it('should send http get request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { data: [] };
+    nock(process.env.BASE_URL)
+      .get('/users')
+      .query(true)
+      .reply(200, data);
+
+    get('/users')
+      .then(users => {
+        expect(users).to.exist;
+        expect(users).to.be.eql(data);
+        done(null, data);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
   it('should send http head request', done => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     nock(process.env.BASE_URL)
@@ -71,19 +90,22 @@ describe('client shortcuts', () => {
       });
   });
 
-  it('should send http get request', done => {
+  it('should send http options request', done => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
-    const data = { data: [] };
     nock(process.env.BASE_URL)
-      .get('/users')
+      .defaultReplyHeaders({
+        'Content-Type': 'application/json',
+      })
+      .options('/users/5c1766243c9d520004e2b542')
       .query(true)
-      .reply(200, data);
+      .reply(200);
 
-    get('/users')
-      .then(users => {
-        expect(users).to.exist;
-        expect(users).to.be.eql(data);
-        done(null, data);
+    options('/users/5c1766243c9d520004e2b542')
+      .then(response => {
+        expect(response).to.exist;
+        expect(response).to.exist;
+        expect(response.headers).to.exist;
+        done(null, response);
       })
       .catch(error => {
         done(error);

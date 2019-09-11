@@ -25,10 +25,10 @@ export const createHttpClient = optns => {
   // try create http client
   if (!httpClient) {
     // merge with given request options
-    const options = withDefaults(optns);
+    const clientOptions = withDefaults(optns);
 
     // create http client
-    httpClient = axios.create(options);
+    httpClient = axios.create(clientOptions);
     httpClient.id = Date.now();
   }
 
@@ -77,13 +77,13 @@ export const disposeHttpClient = () => {
  */
 export const request = optns => {
   // ensure options
-  const options = withDefaults(optns);
+  const requestOptions = withDefaults(optns);
 
   // ensure http client
-  const client = createHttpClient(options);
+  const client = createHttpClient(requestOptions);
 
   // issue http(s) request
-  return client.request(options);
+  return client.request(requestOptions);
 };
 
 /**
@@ -105,32 +105,8 @@ export const request = optns => {
  * deleteUser.then(user => { ... }).catch(error => { ... });
  */
 export const del = (url, optns = {}) => {
-  const options = { method: 'DELETE', url, ...optns };
-  return wrapRequest(request(options));
-};
-
-/**
- * @function head
- * @name head
- * @description Issue http head request to specified url.
- * @param {string} url valid http path.
- * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with raw response on success or error
- * on failure.
- * @author lally elias <lallyelias87@mail.com>
- * @license MIT
- * @since 0.1.0
- * @version 0.1.0
- * @static
- * @public
- * @example
- *
- * const headUser = head('/users/5c1766243');
- * headUser.then({ headers } => { ... }).catch(error => { ... });
- */
-export const head = (url, optns = {}) => {
-  const options = { method: 'HEAD', url, ...optns };
-  return wrapRequest(request(options), true);
+  const requestOptions = { method: 'DELETE', url, ...optns };
+  return wrapRequest(request(requestOptions));
 };
 
 /**
@@ -160,6 +136,54 @@ export const head = (url, optns = {}) => {
  * getUser.then(user => { ... }).catch(error => { ... });
  */
 export const get = (url, optns = {}) => {
-  const options = { method: 'GET', url, ...optns };
-  return wrapRequest(request(options));
+  const requestOptions = { method: 'GET', url, ...optns };
+  return wrapRequest(request(requestOptions));
+};
+
+/**
+ * @function head
+ * @name head
+ * @description Issue http head request to specified url.
+ * @param {string} url valid http path.
+ * @param {object} [optns={}] valid request options.
+ * @returns {Promise} promise resolve with raw response on success or error
+ * on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const headUser = head('/users/5c1766243');
+ * headUser.then({ headers } => { ... }).catch(error => { ... });
+ */
+export const head = (url, optns = {}) => {
+  const requestOptions = { method: 'HEAD', url, ...optns };
+  return wrapRequest(request(requestOptions), true);
+};
+
+/**
+ * @function options
+ * @name options
+ * @description Issue http options request to specified url.
+ * @param {string} url valid http path.
+ * @param {object} [optns={}] valid request options.
+ * @returns {Promise} promise resolve with raw response on success or error
+ * on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const optionUser = options('/users/5c1766243');
+ * optionUser.then({ headers } => { ... }).catch(error => { ... });
+ */
+export const options = (url, optns = {}) => {
+  const requestOptions = { method: 'OPTIONS', url, ...optns };
+  return wrapRequest(request(requestOptions), true);
 };
