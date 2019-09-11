@@ -1,6 +1,6 @@
 import nock from 'nock';
 import { expect } from '@lykmapipo/test-helpers';
-import { disposeHttpClient, request, del, get } from '../src';
+import { disposeHttpClient, request, del, head, get } from '../src';
 
 describe('client shortcuts', () => {
   beforeEach(() => {
@@ -43,6 +43,28 @@ describe('client shortcuts', () => {
         expect(response).to.exist;
         expect(response).to.be.eql(data);
         done(null, data);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should send http head request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    nock(process.env.BASE_URL)
+      .defaultReplyHeaders({
+        'Content-Type': 'application/json',
+      })
+      .head('/users/5c1766243c9d520004e2b542')
+      .query(true)
+      .reply(200);
+
+    head('/users/5c1766243c9d520004e2b542')
+      .then(response => {
+        expect(response).to.exist;
+        expect(response).to.exist;
+        expect(response.headers).to.exist;
+        done(null, response);
       })
       .catch(error => {
         done(error);

@@ -110,6 +110,30 @@ export const del = (url, optns = {}) => {
 };
 
 /**
+ * @function head
+ * @name head
+ * @description Issue http head request to specified url.
+ * @param {string} url valid http path.
+ * @param {object} [optns={}] valid request options.
+ * @returns {Promise} promise resolve with raw response on success or error
+ * on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const headUser = head('/users/5c1766243');
+ * headUser.then({ headers } => { ... }).catch(error => { ... });
+ */
+export const head = (url, optns = {}) => {
+  const options = { method: 'HEAD', url, ...optns };
+  return wrapRequest(request(options), true);
+};
+
+/**
  * @function get
  * @name get
  * @description Issue http get request to specified url.

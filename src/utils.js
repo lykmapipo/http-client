@@ -131,6 +131,7 @@ export const mapResponseToError = rawResponse => {
  * @name wrapRequest
  * @description Wrap http request and convert raw response to error or data
  * @param {Promise} request valid http request
+ * @param {boolean} [skipData=false] whether to skip map raw response to data
  * @returns {Promise} request with normalized response error and data
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
@@ -143,8 +144,8 @@ export const mapResponseToError = rawResponse => {
  * const wrappedRequest = wrapRequest(request).
  * // => Promise;
  */
-export const wrapRequest = request => {
+export const wrapRequest = (request, skipData = false) => {
   return request
-    .then(mapResponseToData)
+    .then(response => (skipData ? response : mapResponseToData(response)))
     .catch(response => Promise.reject(mapResponseToError(response)));
 };

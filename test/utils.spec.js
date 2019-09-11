@@ -146,6 +146,18 @@ describe('client utils', () => {
       .catch(done);
   });
 
+  it('should wrap request and yield raw response', done => {
+    const rawResponse = { status: 200, data: [] };
+    const request = Promise.resolve(rawResponse);
+
+    wrapRequest(request, true)
+      .then(data => {
+        expect(data).to.exist.and.be.eql(rawResponse);
+        done(null, data);
+      })
+      .catch(done);
+  });
+
   it('should wrap request and yield error', done => {
     const rawResponse = { status: 400, message: 'Bad Request' };
     const request = Promise.reject(rawResponse);
