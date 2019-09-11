@@ -8,6 +8,7 @@ import {
   head,
   options,
   post,
+  put,
 } from '../src';
 
 describe('client shortcuts', () => {
@@ -41,11 +42,11 @@ describe('client shortcuts', () => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = {};
     nock(process.env.BASE_URL)
-      .delete('/users/5c1766243c9d520004e2b542')
+      .delete('/users/5c1766243')
       .query(true)
       .reply(200, data);
 
-    del('/users/5c1766243c9d520004e2b542')
+    del('/users/5c1766243')
       .then(response => {
         expect(response).to.exist;
         expect(response).to.exist;
@@ -82,11 +83,11 @@ describe('client shortcuts', () => {
       .defaultReplyHeaders({
         'Content-Type': 'application/json',
       })
-      .head('/users/5c1766243c9d520004e2b542')
+      .head('/users/5c1766243')
       .query(true)
       .reply(200);
 
-    head('/users/5c1766243c9d520004e2b542')
+    head('/users/5c1766243')
       .then(response => {
         expect(response).to.exist;
         expect(response).to.exist;
@@ -104,11 +105,11 @@ describe('client shortcuts', () => {
       .defaultReplyHeaders({
         'Content-Type': 'application/json',
       })
-      .options('/users/5c1766243c9d520004e2b542')
+      .options('/users/5c1766243')
       .query(true)
       .reply(200);
 
-    options('/users/5c1766243c9d520004e2b542')
+    options('/users/5c1766243')
       .then(response => {
         expect(response).to.exist;
         expect(response).to.exist;
@@ -149,6 +150,41 @@ describe('client shortcuts', () => {
       .reply(201, data);
 
     post('/users', {}).catch(error => {
+      expect(error).to.exist;
+      expect(error.message).to.be.equal('Missing Payload');
+      done();
+    });
+  });
+
+  it('should send http put request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { age: 11 };
+    nock(process.env.BASE_URL)
+      .put('/users/5c1766243')
+      .query(true)
+      .reply(200, data);
+
+    put('/users/5c1766243', data)
+      .then(user => {
+        expect(user).to.exist;
+        expect(user).to.exist;
+        expect(user).to.be.eql(data);
+        done(null, user);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should reject send http put request if no payload', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { age: 11 };
+    nock(process.env.BASE_URL)
+      .put('/users/5c1766243')
+      .query(true)
+      .reply(200, data);
+
+    put('/users/5c1766243', {}).catch(error => {
       expect(error).to.exist;
       expect(error.message).to.be.equal('Missing Payload');
       done();
