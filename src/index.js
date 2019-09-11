@@ -60,9 +60,10 @@ export const disposeHttpClient = () => {
 /**
  * @function request
  * @name request
- * @description Issue http get request using given options.
+ * @description Issue http request using given options.
  * @param {object} optns valid request options
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with raw response on success or error
+ * on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
