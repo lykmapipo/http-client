@@ -18,7 +18,7 @@ let httpClient;
  * @public
  * @example
  *
- * const optns = { baseUrl: ... };
+ * const optns = { baseURL: ... };
  * const httpClient = createHttpClient();
  */
 export const createHttpClient = optns => {
@@ -101,11 +101,12 @@ export const request = optns => {
  * @public
  * @example
  *
- * const deleteUser = del('/users/5c1766243c9d520004e2b542');
+ * const deleteUser = del('/users/5c1766243');
  * deleteUser.then(user => { ... }).catch(error => { ... });
  */
 export const del = (url, optns = {}) => {
-  return wrapRequest(request({ method: 'DELETE', url, ...optns }));
+  const options = { method: 'DELETE', url, ...optns };
+  return wrapRequest(request(options));
 };
 
 /**
@@ -131,9 +132,10 @@ export const del = (url, optns = {}) => {
  * getUsers.then(users => { ... }).catch(error => { ... });
  *
  * // single
- * const getUser = get('/users/12');
+ * const getUser = get('/users/5c1766243');
  * getUser.then(user => { ... }).catch(error => { ... });
  */
 export const get = (url, optns = {}) => {
-  return wrapRequest(request({ method: 'GET', url, ...optns }));
+  const options = { method: 'GET', url, ...optns };
+  return wrapRequest(request(options));
 };
