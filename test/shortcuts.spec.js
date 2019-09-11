@@ -1,6 +1,14 @@
 import nock from 'nock';
 import { expect } from '@lykmapipo/test-helpers';
-import { disposeHttpClient, request, del, get, head, options } from '../src';
+import {
+  disposeHttpClient,
+  request,
+  del,
+  get,
+  head,
+  options,
+  post,
+} from '../src';
 
 describe('client shortcuts', () => {
   beforeEach(() => {
@@ -110,6 +118,41 @@ describe('client shortcuts', () => {
       .catch(error => {
         done(error);
       });
+  });
+
+  it('should send http post request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { age: 11 };
+    nock(process.env.BASE_URL)
+      .post('/users')
+      .query(true)
+      .reply(201, data);
+
+    post('/users', data)
+      .then(user => {
+        expect(user).to.exist;
+        expect(user).to.exist;
+        expect(user).to.be.eql(data);
+        done(null, user);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should reject send http post request if no payload', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { age: 11 };
+    nock(process.env.BASE_URL)
+      .post('/users')
+      .query(true)
+      .reply(201, data);
+
+    post('/users', {}).catch(error => {
+      expect(error).to.exist;
+      expect(error.message).to.be.equal('Missing Payload');
+      done();
+    });
   });
 
   afterEach(() => {
