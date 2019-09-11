@@ -1,6 +1,6 @@
 import nock from 'nock';
 import { expect } from '@lykmapipo/test-helpers';
-import { disposeHttpClient, request, get } from '../src';
+import { disposeHttpClient, request, del, get } from '../src';
 
 describe('client shortcuts', () => {
   beforeEach(() => {
@@ -22,6 +22,26 @@ describe('client shortcuts', () => {
       .then(response => {
         expect(response).to.exist;
         expect(response.data).to.exist;
+        done(null, data);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should send http delete request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = {};
+    nock(process.env.BASE_URL)
+      .delete('/users/5c1766243c9d520004e2b542')
+      .query(true)
+      .reply(200, data);
+
+    del('/users/5c1766243c9d520004e2b542')
+      .then(response => {
+        expect(response).to.exist;
+        expect(response).to.exist;
+        expect(response).to.be.eql(data);
         done(null, data);
       })
       .catch(error => {

@@ -87,11 +87,33 @@ export const request = optns => {
 };
 
 /**
+ * @function del
+ * @name del
+ * @description Issue http delete request to specified url.
+ * @param {string} url valid http path.
+ * @param {object} [optns={}] valid request options.
+ * @returns {Promise} promise resolve with data on success or error on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const deleteUser = del('/users/5c1766243c9d520004e2b542');
+ * deleteUser.then(user => { ... }).catch(error => { ... });
+ */
+export const del = (url, optns = {}) => {
+  return wrapRequest(request({ method: 'DELETE', url, ...optns }));
+};
+
+/**
  * @function get
  * @name get
  * @description Issue http get request to specified url.
  * @param {string} url valid http path.
- * @param {object} [optns] valid request options.
+ * @param {object} [optns={}] valid request options.
  * @param {object} [optns.params] params that will be encoded into url
  * query params.
  * @returns {Promise} promise resolve with data on success or error on failure.
@@ -113,5 +135,5 @@ export const request = optns => {
  * getUser.then(user => { ... }).catch(error => { ... });
  */
 export const get = (url, optns = {}) => {
-  return wrapRequest(request({ url, ...optns }));
+  return wrapRequest(request({ method: 'GET', url, ...optns }));
 };
