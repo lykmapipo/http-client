@@ -45,3 +45,22 @@ export const withDefaults = optns => {
   // return options
   return options;
 };
+
+/**
+ * @function mapResponseToData
+ * @name mapResponseToData
+ * @description Convert raw http response to data
+ * @param {object} response axios http response
+ * @returns {object} response data
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const data = mapResponseToData(httpResponse).
+ * // => { .. };
+ */
+export const mapResponseToData = response => response.data;

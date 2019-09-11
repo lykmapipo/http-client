@@ -1,5 +1,5 @@
 import { expect, faker } from '@lykmapipo/test-helpers';
-import { withDefaults } from '../src/utils';
+import { withDefaults, mapResponseToData } from '../src/utils';
 
 describe('client utils', () => {
   it('should prepare default options', () => {
@@ -28,5 +28,11 @@ describe('client utils', () => {
       'Content-Type': 'application/json',
       'X-API-Key': optns.headers['X-API-Key'],
     });
+  });
+
+  it('should map response to data', () => {
+    const response = { data: [] };
+    const data = mapResponseToData(response);
+    expect(data).to.exist.and.be.eql(response.data);
   });
 });
