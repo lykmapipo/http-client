@@ -3,6 +3,7 @@ import {
   withDefaults,
   mapResponseToData,
   mapResponseToError,
+  wrapRequest,
 } from '../src/utils';
 
 describe('client utils', () => {
@@ -131,5 +132,30 @@ describe('client utils', () => {
     expect(error.code).to.be.equal(rawResponse.status);
     expect(error.message).to.be.equal(rawResponse.message);
     expect(error.description).to.be.equal(rawResponse.message);
+  });
+
+  it('should wrap request and yield data', done => {
+    const rawResponse = { status: 200, data: [] };
+    const request = Promise.resolve(rawResponse);
+
+    wrapRequest(request)
+      .then(data => {
+        expect(data).to.exist.and.be.eql(rawResponse.data);
+        done(null, data);
+      })
+      .catch(done);
+  });
+
+  it('should wrap request and yield error', done => {
+    const rawResponse = { status: 400, message: 'Bad Request' };
+    const request = Promise.reject(rawResponse);
+
+    wrapRequest(request).catch(error => {
+      expect(error).to.exist.and.be.an.instanceof(Error);
+      expect(error.status).to.be.equal(rawResponse.status);
+      expect(error.message).to.be.equal(rawResponse.message);
+      expect(error.description).to.be.equal(rawResponse.message);
+      done();
+    });
   });
 });

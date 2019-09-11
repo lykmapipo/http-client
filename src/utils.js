@@ -125,3 +125,26 @@ export const mapResponseToError = rawResponse => {
   // return normalized native error
   return error;
 };
+
+/**
+ * @function wrapRequest
+ * @name wrapRequest
+ * @description Wrap http request and convert raw response to error or data
+ * @param {Promise} request valid http request
+ * @returns {Promise} request with normalized response error and data
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const wrappedRequest = wrapRequest(request).
+ * // => Promise;
+ */
+export const wrapRequest = request => {
+  return request
+    .then(mapResponseToData)
+    .catch(response => Promise.reject(mapResponseToError(response)));
+};
