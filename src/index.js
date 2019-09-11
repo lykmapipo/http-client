@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { withDefaults } from './utils';
+import { withDefaults, wrapRequest } from './utils';
 
 // locals
 let httpClient;
@@ -73,7 +73,7 @@ export const disposeHttpClient = () => {
  * @example
  *
  * const getUsers = request('/users');
- * getUsers.then(users => { ... }).catch(error => { ... });
+ * getUsers.then(response => { ... }).catch(error => { ... });
  */
 export const request = optns => {
   // ensure options
@@ -84,4 +84,34 @@ export const request = optns => {
 
   // issue http(s) request
   return client.request(options);
+};
+
+/**
+ * @function get
+ * @name get
+ * @description Issue http get request to specified url.
+ * @param {string} url valid http path.
+ * @param {object} [optns] valid request options.
+ * @param {object} [optns.params] params that will be encoded into url
+ * query params.
+ * @returns {Promise} promise resolve with data on success or error on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * // list
+ * const params = { age: { $in: [1, 2] } };
+ * const getUsers = get('/users', { params });
+ * getUsers.then(users => { ... }).catch(error => { ... });
+ *
+ * // single
+ * const getUser = get('/users/12');
+ * getUser.then(user => { ... }).catch(error => { ... });
+ */
+export const get = (url, optns = {}) => {
+  return wrapRequest(request({ url, ...optns }));
 };
