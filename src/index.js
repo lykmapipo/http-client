@@ -20,7 +20,7 @@ let httpClient;
  * @example
  *
  * const optns = { baseURL: ... };
- * const httpClient = createHttpClient();
+ * const httpClient = createHttpClient(optns);
  */
 export const createHttpClient = optns => {
   // try create http client
@@ -63,7 +63,7 @@ export const disposeHttpClient = () => {
  * @name request
  * @description Issue http request using given options.
  * @param {object} optns valid request options
- * @returns {Promise} promise resolve with raw response on success or error
+ * @returns {Promise} promise resolve with raw http response on success or error
  * on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
@@ -147,7 +147,7 @@ export const get = (url, optns = {}) => {
  * @description Issue http head request to specified url.
  * @param {string} url valid http path.
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with raw response on success or error
+ * @returns {Promise} promise resolve with raw http response on success or error
  * on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
@@ -171,7 +171,7 @@ export const head = (url, optns = {}) => {
  * @description Issue http options request to specified url.
  * @param {string} url valid http path.
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with raw response on success or error
+ * @returns {Promise} promise resolve with raw http response on success or error
  * on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
