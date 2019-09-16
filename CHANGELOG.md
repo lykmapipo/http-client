@@ -1,3 +1,16 @@
+#### 0.1.1 (2019-09-16)
+
+##### Chores
+
+* **deps:**
+  *  force latest version & audit fix ([48e3f214](https://github.com/lykmapipo/http-client/commit/48e3f2147e1cb1551dc0da5a6ce809ee5d8ab501))
+  *  force latest versions & audit fix ([ed5341c6](https://github.com/lykmapipo/http-client/commit/ed5341c6db87a632b9a8dc28927414f5c0b3b795))
+  *  force latest version & audit fix ([4da3f478](https://github.com/lykmapipo/http-client/commit/4da3f4784fa7e18700d5868bf5f00e72f7efa1cf))
+
+##### Code Style Changes
+
+*  fix typos and improve jsdocs ([9e8d9fc8](https://github.com/lykmapipo/http-client/commit/9e8d9fc87b6b9758dabe76122add02ef496ef0d2))
+
 #### 0.1.0 (2019-09-11)
 
 ##### Chores
