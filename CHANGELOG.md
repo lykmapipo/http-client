@@ -1,3 +1,9 @@
+#### 0.1.7 (2019-11-15)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([d26b70d1](https://github.com/lykmapipo/http-client/commit/d26b70d19b7e57830b1ac784a79a333e2d614775))
+
 #### 0.1.6 (2019-11-05)
 
 ##### Chores
