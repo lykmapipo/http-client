@@ -1,19 +1,9 @@
-import { isEmpty } from 'lodash';
+import { forEach, startsWith, toLower, isFunction, isEmpty } from 'lodash';
 import axios from 'axios';
 import { mergeObjects, assign } from '@lykmapipo/common';
+import FormData from 'form-data';
 import { getString } from '@lykmapipo/env';
 
-/**
- * @name CONTENT_TYPE
- * @constant
- * @default application/json
- * @description supported content type
- * @since 0.1.0
- * @version 0.1.0
- * @static
- * @public
- * @ignore
- */
 const CONTENT_TYPE = 'application/json';
 
 /**
@@ -46,6 +36,109 @@ const withDefaults = optns => {
 
   // return options
   return options;
+};
+
+/**
+ * @function isFormData
+ * @name isFormData
+ * @description Determine if a value is a FormData
+ * @param {*} value data to test
+ * @returns {boolean} true if value is an FormData, otherwise false
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * isFormData({});
+ * // => false;
+ *
+ * * isFormData(new FormData());
+ * // => true;
+ */
+const isFormData = value => {
+  return typeof FormData !== 'undefined' && value instanceof FormData;
+};
+
+/**
+ * @function toFormData
+ * @name toFormData
+ * @description Convert given plain object to form data instance
+ * @param {object} [data={}] valid data
+ * @returns {object} valid form data instance
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const data = toFormData({ ... });
+ * // => FormData{ ... };
+ */
+const toFormData = (data = {}) => {
+  const form = new FormData();
+  forEach(data, (value, key) => {
+    if (key && value) {
+      // TODO: handle object value
+      form.append(key, value);
+    }
+  });
+  return form;
+};
+
+/**
+ * @function normalizeRequest
+ * @name normalizeRequest
+ * @description Normalize http request with sensible config
+ * @param {object} [request={}] valid request options
+ * @returns {object} normalize request options
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const request = normalizeRequest({ ... }).
+ * // => { ... };
+ */
+const normalizeRequest = request => {
+  // obtaion request parts
+  let { headers = {}, data = {}, multipart = false } = request;
+
+  // check for multipart
+  const contentType = headers['content-type'] || headers['Content-Type'];
+  multipart = multipart || startsWith(toLower(contentType), 'multipart');
+
+  // check for multipart flag
+  if (multipart) {
+    if (!isFormData(data)) {
+      data = toFormData(data);
+    }
+  }
+
+  // handle form data
+  if (isFormData(data)) {
+    let extraHeaders = {};
+    if (isFunction(data.getHeaders)) {
+      delete headers['content-type'];
+      delete headers['Content-Type'];
+      extraHeaders = data.getHeaders();
+    }
+    headers = mergeObjects(headers, extraHeaders);
+  }
+
+  // update request
+  request.headers = headers;
+  request.data = data;
+
+  // return normalize request
+  return request;
 };
 
 /**
@@ -170,7 +263,7 @@ let httpClient;
  * @example
  *
  * const optns = { baseURL: ... };
- * const httpClient = createHttpClient();
+ * const httpClient = createHttpClient(optns);
  */
 const createHttpClient = optns => {
   // try create http client
@@ -213,8 +306,8 @@ const disposeHttpClient = () => {
  * @name request
  * @description Issue http request using given options.
  * @param {object} optns valid request options
- * @returns {Promise} promise resolve with raw response on success or error
- * on failure.
+ * @returns {Promise} promise resolve with raw http response on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -223,8 +316,9 @@ const disposeHttpClient = () => {
  * @public
  * @example
  *
- * const getUsers = request('/users');
- * getUsers.then(response => { ... }).catch(error => { ... });
+ * request('/users')
+ *   .then(response => { ... })
+ *   .catch(error => { ... });
  */
 const request = optns => {
   // ensure options
@@ -234,8 +328,50 @@ const request = optns => {
   const client = createHttpClient(requestOptions);
 
   // issue http(s) request
-  return client.request(requestOptions);
+  return client.request(normalizeRequest(requestOptions));
 };
+
+/**
+ * @function spread
+ * @name spread
+ * @description Flattened array fullfillment to the formal parameters of
+ * the fulfillment handler.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const getRoles = get('/roles');
+ * const getUsers = get('/users');
+ * const requests = all(getRoles(), getUsers());
+ * request.then(spread((roles, users) => { ... }));
+ */
+const spread = axios.spread; // eslint-disable-line
+
+/**
+ * @function all
+ * @name all
+ * @description Performing multiple concurrent http requests.
+ * @param {object[]} requests valid http requests
+ * @returns {Promise} promise resolve with http response on success
+ * or error on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const getRoles = get('/roles');
+ * const getUsers = get('/users');
+ * const requests = all(getRoles(), getUsers());
+ * request.then(spread((roles, users) => { ... }));
+ */
+const all = (...requests) => axios.all([...requests]);
 
 /**
  * @function del
@@ -243,7 +379,8 @@ const request = optns => {
  * @description Issue http delete request to specified url.
  * @param {string} url valid http path.
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -252,8 +389,9 @@ const request = optns => {
  * @public
  * @example
  *
- * const deleteUser = del('/users/5c1766243');
- * deleteUser.then(user => { ... }).catch(error => { ... });
+ * del('/users/5c1766243')
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
  */
 const del = (url, optns = {}) => {
   const requestOptions = { method: 'DELETE', url, ...optns };
@@ -268,7 +406,8 @@ const del = (url, optns = {}) => {
  * @param {object} [optns={}] valid request options.
  * @param {object} [optns.params] params that will be encoded into url
  * query params.
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -279,12 +418,14 @@ const del = (url, optns = {}) => {
  *
  * // list
  * const params = { age: { $in: [1, 2] } };
- * const getUsers = get('/users', { params });
- * getUsers.then(users => { ... }).catch(error => { ... });
+ * get('/users', { params })
+ *   .then(users => { ... })
+ *   .catch(error => { ... });
  *
  * // single
- * const getUser = get('/users/5c1766243');
- * getUser.then(user => { ... }).catch(error => { ... });
+ * get('/users/5c1766243')
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
  */
 const get = (url, optns = {}) => {
   const requestOptions = { method: 'GET', url, ...optns };
@@ -297,8 +438,8 @@ const get = (url, optns = {}) => {
  * @description Issue http head request to specified url.
  * @param {string} url valid http path.
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with raw response on success or error
- * on failure.
+ * @returns {Promise} promise resolve with raw http response on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -307,8 +448,9 @@ const get = (url, optns = {}) => {
  * @public
  * @example
  *
- * const headUser = head('/users/5c1766243');
- * headUser.then({ headers } => { ... }).catch(error => { ... });
+ * head('/users/5c1766243')
+ *   .then({ headers } => { ... })
+ *   .catch(error => { ... });
  */
 const head = (url, optns = {}) => {
   const requestOptions = { method: 'HEAD', url, ...optns };
@@ -321,8 +463,8 @@ const head = (url, optns = {}) => {
  * @description Issue http options request to specified url.
  * @param {string} url valid http path.
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with raw response on success or error
- * on failure.
+ * @returns {Promise} promise resolve with raw http response on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -331,8 +473,9 @@ const head = (url, optns = {}) => {
  * @public
  * @example
  *
- * const optionUser = options('/users/5c1766243');
- * optionUser.then({ headers } => { ... }).catch(error => { ... });
+ * options('/users/5c1766243')
+ *   .then({ headers } => { ... })
+ *   .catch(error => { ... });
  */
 const options = (url, optns = {}) => {
   const requestOptions = { method: 'OPTIONS', url, ...optns };
@@ -346,7 +489,8 @@ const options = (url, optns = {}) => {
  * @param {string} url valid http path.
  * @param {object} data request payload to be encoded on http request body
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -355,8 +499,21 @@ const options = (url, optns = {}) => {
  * @public
  * @example
  *
- * const patchUser = patch('/users', { age: 14 });
- * patchUser.then(user => { ... }).catch(error => { ... });
+ * // json request
+ * patch('/users/5c1766243', { age: 14 })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request
+ * patch('/users/5c1766243', { age: 14 }, { multipart: true })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request using form data
+ * const form = new FormData()
+ * patch('/users/5c1766243', form)
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
  */
 const patch = (url, data, optns = {}) => {
   if (isEmpty(data)) {
@@ -373,7 +530,8 @@ const patch = (url, data, optns = {}) => {
  * @param {string} url valid http path.
  * @param {object} data request payload to be encoded on http request body
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -382,8 +540,21 @@ const patch = (url, data, optns = {}) => {
  * @public
  * @example
  *
- * const postUser = post('/users', { age: 14 });
- * postUser.then(user => { ... }).catch(error => { ... });
+ * // json request
+ * post('/users', { age: 14 })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request
+ * post('/users', { age: 14 }, { multipart: true })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request using form data
+ * const form = new FormData()
+ * post('/users', form)
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
  */
 const post = (url, data, optns = {}) => {
   if (isEmpty(data)) {
@@ -400,7 +571,8 @@ const post = (url, data, optns = {}) => {
  * @param {string} url valid http path.
  * @param {object} data request payload to be encoded on http request body
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -409,8 +581,21 @@ const post = (url, data, optns = {}) => {
  * @public
  * @example
  *
- * const putUser = put('/users', { age: 14 });
- * putUser.then(user => { ... }).catch(error => { ... });
+ * // json request
+ * put('/users/5c1766243', { age: 14 })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request
+ * put('/users/5c1766243', { age: 14 }, { multipart: true })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request using form data
+ * const form = new FormData()
+ * put('/users/5c1766243', form)
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
  */
 const put = (url, data, optns = {}) => {
   if (isEmpty(data)) {
@@ -420,4 +605,76 @@ const put = (url, data, optns = {}) => {
   return wrapRequest(request(requestOptions));
 };
 
-export { createHttpClient, del, disposeHttpClient, get, head, options, patch, post, put, request };
+/**
+ * @function sendFile
+ * @name sendFile
+ * @description Issue http multipart request to specified url.
+ * @param {string} url valid http path.
+ * @param {object} data request payload to be encoded on http request body
+ * @param {object} [optns={}] valid request options.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * // send stream
+ * const image = fs.createReadStream(imagePath);
+ * sendFile('/files', { image })
+ *   .then(file => { ... })
+ *   .catch(error => { ... });
+ *
+ * // send buffer
+ * const image = fs.readFileSync(imagePath);
+ * sendFile('/files/5c1766243', { image }, { method: 'PATCH'})
+ *   .then(file => { ... })
+ *   .catch(error => { ... });
+ *
+ * // send form data
+ * const image = document.getElementById('file').files[0];
+ * sendFile('/files', { image })
+ *   .then(file => { ... })
+ *   .catch(error => { ... });
+ */
+const sendFile = (url, data, optns) => {
+  if (!data || isEmpty(data)) {
+    return Promise.reject(new Error('Missing Payload'));
+  }
+  const opts = mergeObjects(optns, { multipart: true });
+  const requestOptions = { method: 'POST', url, data, ...opts };
+  return wrapRequest(request(requestOptions));
+};
+
+/**
+ * @function fetchFile
+ * @name fetchFile
+ * @description Issue http get request to fetch file from given url.
+ * @param {string} url valid http path.
+ * @param {object} [optns={}] valid request options.
+ * @param {object} [optns.params] params that will be encoded into url
+ * query params.
+ * @returns {Promise} promise resolve with file stream on success
+ * or error on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * fetchFile('/files/5c1766243')
+ *   .then(stream => { ... })
+ *   .catch(error => { ... });
+ */
+const fetchFile = (url, optns = {}) => {
+  const opts = mergeObjects(optns, { responseType: 'stream' });
+  const requestOptions = { method: 'GET', url, ...opts };
+  return wrapRequest(request(requestOptions));
+};
+
+export { all, createHttpClient, del, disposeHttpClient, fetchFile, get, head, isFormData, options, patch, post, put, request, sendFile, spread, toFormData };

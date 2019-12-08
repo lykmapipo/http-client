@@ -1,3 +1,25 @@
+#### 0.2.0 (2019-12-08)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([88fd21cb](https://github.com/lykmapipo/http-client/commit/88fd21cb2b57260565b38ffcd2a47b919de2d7df))
+
+##### Documentation Changes
+
+*  document multipart request ([a14699cb](https://github.com/lykmapipo/http-client/commit/a14699cbc1be9f5650eae21f6418c0c5c77fe1ab))
+
+##### New Features
+
+*  add fetch file helper ([2aa82629](https://github.com/lykmapipo/http-client/commit/2aa82629f41708c4d4893b7dadc488bda061cac0))
+*  add send file helper ([33dee656](https://github.com/lykmapipo/http-client/commit/33dee6565375ef7d06c25a0648cc9c0708c7db84))
+*  handle multipart request ([0ea46550](https://github.com/lykmapipo/http-client/commit/0ea4655063dd1d3997884d073986d64c1a228208))
+*  add all and spread helpers ([9f751ecf](https://github.com/lykmapipo/http-client/commit/9f751ecf51d0fe9d2970e79604fb93a6b25a807d))
+* **utils:**  add form data helpers ([2d7f53c8](https://github.com/lykmapipo/http-client/commit/2d7f53c8cf0f9d4b7f2da6e7ac8886487a573e00))
+
+##### Code Style Changes
+
+*  update jsdoc examples ([2ae7ba56](https://github.com/lykmapipo/http-client/commit/2ae7ba5674e4e16a03bb0e12fa706d771356f164))
+
 #### 0.1.8 (2019-11-29)
 
 ##### Chores
