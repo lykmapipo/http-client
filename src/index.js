@@ -83,8 +83,9 @@ export const disposeHttpClient = () => {
  * @public
  * @example
  *
- * const getUsers = request('/users');
- * getUsers.then(response => { ... }).catch(error => { ... });
+ * request('/users')
+ *   .then(response => { ... })
+ *   .catch(error => { ... });
  */
 export const request = optns => {
   // ensure options
@@ -155,8 +156,9 @@ export const all = (...requests) => axios.all([...requests]);
  * @public
  * @example
  *
- * const deleteUser = del('/users/5c1766243');
- * deleteUser.then(user => { ... }).catch(error => { ... });
+ * del('/users/5c1766243')
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
  */
 export const del = (url, optns = {}) => {
   const requestOptions = { method: 'DELETE', url, ...optns };
@@ -183,12 +185,14 @@ export const del = (url, optns = {}) => {
  *
  * // list
  * const params = { age: { $in: [1, 2] } };
- * const getUsers = get('/users', { params });
- * getUsers.then(users => { ... }).catch(error => { ... });
+ * get('/users', { params })
+ *   .then(users => { ... })
+ *   .catch(error => { ... });
  *
  * // single
- * const getUser = get('/users/5c1766243');
- * getUser.then(user => { ... }).catch(error => { ... });
+ * get('/users/5c1766243')
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
  */
 export const get = (url, optns = {}) => {
   const requestOptions = { method: 'GET', url, ...optns };
@@ -211,8 +215,9 @@ export const get = (url, optns = {}) => {
  * @public
  * @example
  *
- * const headUser = head('/users/5c1766243');
- * headUser.then({ headers } => { ... }).catch(error => { ... });
+ * head('/users/5c1766243')
+ *   .then({ headers } => { ... })
+ *   .catch(error => { ... });
  */
 export const head = (url, optns = {}) => {
   const requestOptions = { method: 'HEAD', url, ...optns };
@@ -235,8 +240,9 @@ export const head = (url, optns = {}) => {
  * @public
  * @example
  *
- * const optionUser = options('/users/5c1766243');
- * optionUser.then({ headers } => { ... }).catch(error => { ... });
+ * options('/users/5c1766243')
+ *   .then({ headers } => { ... })
+ *   .catch(error => { ... });
  */
 export const options = (url, optns = {}) => {
   const requestOptions = { method: 'OPTIONS', url, ...optns };
@@ -260,8 +266,21 @@ export const options = (url, optns = {}) => {
  * @public
  * @example
  *
- * const patchUser = patch('/users', { age: 14 });
- * patchUser.then(user => { ... }).catch(error => { ... });
+ * // json request
+ * patch('/users/5c1766243', { age: 14 })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request
+ * patch('/users/5c1766243', { age: 14 }, { multipart: true })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request using form data
+ * const form = new FormData()
+ * patch('/users/5c1766243', form)
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
  */
 export const patch = (url, data, optns = {}) => {
   if (isEmpty(data)) {
@@ -288,8 +307,21 @@ export const patch = (url, data, optns = {}) => {
  * @public
  * @example
  *
- * const postUser = post('/users', { age: 14 });
- * postUser.then(user => { ... }).catch(error => { ... });
+ * // json request
+ * post('/users', { age: 14 })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request
+ * post('/users', { age: 14 }, { multipart: true })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request using form data
+ * const form = new FormData()
+ * post('/users', form)
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
  */
 export const post = (url, data, optns = {}) => {
   if (isEmpty(data)) {
@@ -316,8 +348,21 @@ export const post = (url, data, optns = {}) => {
  * @public
  * @example
  *
- * const putUser = put('/users', { age: 14 });
- * putUser.then(user => { ... }).catch(error => { ... });
+ * // json request
+ * put('/users/5c1766243', { age: 14 })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request
+ * put('/users/5c1766243', { age: 14 }, { multipart: true })
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
+ *
+ * // multipart request using form data
+ * const form = new FormData()
+ * put('/users/5c1766243', form)
+ *   .then(user => { ... })
+ *   .catch(error => { ... });
  */
 export const put = (url, data, optns = {}) => {
   if (isEmpty(data)) {
