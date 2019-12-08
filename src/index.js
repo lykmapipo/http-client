@@ -416,3 +416,31 @@ export const sendFile = (url, data, optns) => {
   const requestOptions = { method: 'POST', url, data, ...opts };
   return wrapRequest(request(requestOptions));
 };
+
+/**
+ * @function fetchFile
+ * @name fetchFile
+ * @description Issue http get request to fetch file from given url.
+ * @param {string} url valid http path.
+ * @param {object} [optns={}] valid request options.
+ * @param {object} [optns.params] params that will be encoded into url
+ * query params.
+ * @returns {Promise} promise resolve with file stream on success
+ * or error on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * fetchFile('/files/5c1766243')
+ *   .then(stream => { ... })
+ *   .catch(error => { ... });
+ */
+export const fetchFile = (url, optns = {}) => {
+  const opts = mergeObjects(optns, { responseType: 'stream' });
+  const requestOptions = { method: 'GET', url, ...opts };
+  return wrapRequest(request(requestOptions));
+};

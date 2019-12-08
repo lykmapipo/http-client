@@ -14,6 +14,7 @@ import {
   post,
   put,
   sendFile,
+  fetchFile,
 } from '../src';
 
 describe('client shortcuts', () => {
@@ -411,6 +412,26 @@ describe('client shortcuts', () => {
         expect(file).to.exist;
         expect(file).to.be.eql(data);
         done(null, file);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should fetch file via http get request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    nock(process.env.BASE_URL)
+      .get('/files/5c1766243')
+      .query(true)
+      .reply(200, function onReply() {
+        expect(this.req.headers).to.exist;
+        return createReadStream(`${__dirname}/fixtures/image.png`);
+      });
+
+    fetchFile('/files/5c1766243')
+      .then(file => {
+        expect(file).to.exist;
+        done();
       })
       .catch(error => {
         done(error);
