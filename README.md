@@ -1,4 +1,4 @@
-# http-client(WIP)
+# http-client
 
 [![Build Status](https://travis-ci.org/lykmapipo/http-client.svg?branch=master)](https://travis-ci.org/lykmapipo/http-client)
 [![Dependencies Status](https://david-dm.org/lykmapipo/http-client.svg)](https://david-dm.org/lykmapipo/http-client)
@@ -44,13 +44,25 @@ get('/users/5c1766243').then(user => { ... }).catch(error => { ... });
 
 patch('/users/5c1766243', data).then(user => { ... }).catch(error => { ... });
 
+patch('/users/5c1766243', data, { multipart: true })
+  .then(user => { ... })
+  .catch(error => { ... });
+
 post('/users', data).then(user => { ... }).catch(error => { ... });
+
+post('/users', data, { multipart: true })
+  .then(user => { ... })
+  .catch(error => { ... });
 
 put('/users/5c1766243', data).then(user => { ... }).catch(error => { ... });
 
+put('/users/5c1766243', data, { multipart: true })
+  .then(user => { ... })
+  .catch(error => { ... });
+
 all(get('/roles'), get('/users'))
   .then(spread((roles, users) => { ... }))
-  .catch(error => { ... })
+  .catch(error => { ... });
 ```
 
 ## Environment
