@@ -1,9 +1,12 @@
 import { isEmpty } from 'lodash';
 import axios from 'axios';
-import { withDefaults, wrapRequest } from './utils';
+import { withDefaults, wrapRequest, isFormData, toFormData } from './utils';
 
 // locals
 let httpClient;
+
+// export utils
+export { isFormData, toFormData };
 
 /**
  * @function createHttpClient

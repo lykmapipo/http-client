@@ -1,5 +1,8 @@
 import { expect, faker } from '@lykmapipo/test-helpers';
+import FormData from 'form-data';
 import {
+  isFormData,
+  toFormData,
   withDefaults,
   mapResponseToData,
   mapResponseToError,
@@ -7,6 +10,23 @@ import {
 } from '../src/utils';
 
 describe('client utils', () => {
+  it('should check form data value', () => {
+    expect(isFormData('a')).to.be.false;
+    expect(isFormData(1)).to.be.false;
+    expect(isFormData({})).to.be.false;
+    expect(isFormData(new FormData())).to.be.true;
+  });
+
+  it('should create form data', () => {
+    expect(isFormData(toFormData())).to.be.true;
+    expect(isFormData(toFormData({}))).to.be.true;
+    expect(isFormData(toFormData({ key: undefined }))).to.be.true;
+
+    const value = { name: faker.name.findName() };
+    const data = toFormData(value);
+    expect(isFormData(data)).to.be.true;
+  });
+
   it('should prepare default options', () => {
     expect(withDefaults).to.exist.and.be.a('function');
 

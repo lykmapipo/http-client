@@ -1,18 +1,60 @@
+import { forEach } from 'lodash';
+import FormData from 'form-data';
 import { mergeObjects, assign } from '@lykmapipo/common';
 import { getString } from '@lykmapipo/env';
 
+export const CONTENT_TYPE = 'application/json';
+
 /**
- * @name CONTENT_TYPE
- * @constant
- * @default application/json
- * @description supported content type
+ * @function isFormData
+ * @name isFormData
+ * @description Determine if a value is a FormData
+ * @param {*} value data to test
+ * @returns {boolean} true if value is an FormData, otherwise false
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since 0.1.0
  * @version 0.1.0
  * @static
  * @public
- * @ignore
+ * @example
+ *
+ * isFormData({});
+ * // => false;
+ *
+ * * isFormData(new FormData());
+ * // => true;
  */
-export const CONTENT_TYPE = 'application/json';
+export const isFormData = value => {
+  return typeof FormData !== 'undefined' && value instanceof FormData;
+};
+
+/**
+ * @function toFormData
+ * @name toFormData
+ * @description Convert given plain object to form data instance
+ * @param {object} [data={}] valid data
+ * @returns {object} valid form data instance
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const data = toFormData({ ... });
+ * // => FormData{ ... };
+ */
+export const toFormData = (data = {}) => {
+  const form = new FormData();
+  forEach(data, (value, key) => {
+    if (key && value) {
+      form.append(key, value);
+    }
+  });
+  return form;
+};
 
 /**
  * @function withDefaults
