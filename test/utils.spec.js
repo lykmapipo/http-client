@@ -1,9 +1,10 @@
 import { expect, faker } from '@lykmapipo/test-helpers';
 import FormData from 'form-data';
 import {
+  withDefaults,
   isFormData,
   toFormData,
-  withDefaults,
+  normalizeRequest,
   mapResponseToData,
   mapResponseToError,
   wrapRequest,
@@ -53,6 +54,73 @@ describe('client utils', () => {
       'Content-Type': 'application/json',
       'X-API-Key': optns.headers['X-API-Key'],
     });
+  });
+
+  it('should normalize json request', () => {
+    const data = { name: faker.name.findName() };
+    const request = normalizeRequest({ data });
+    expect(request).to.exist;
+    expect(request.data).to.exist.and.be.eql(data);
+  });
+
+  it('should normalize form data request', () => {
+    const data = { name: faker.name.findName() };
+    const request = normalizeRequest({ data: toFormData(data) });
+    expect(request).to.exist;
+    expect(request.data).to.exist.and.be.an.instanceof(FormData);
+    expect(request.headers).to.exist;
+    expect(request.headers['content-type']).to.contain(
+      'multipart/form-data; boundary'
+    );
+  });
+
+  it('should normalize form data request', () => {
+    const data = { name: faker.name.findName() };
+    const request = normalizeRequest({
+      data: toFormData(data),
+      multipart: true,
+    });
+    expect(request).to.exist;
+    expect(request.data).to.exist.and.be.an.instanceof(FormData);
+    expect(request.headers).to.exist;
+    expect(request.headers['content-type']).to.contain(
+      'multipart/form-data; boundary'
+    );
+  });
+
+  it('should normalize json data to form data request via options', () => {
+    const data = { name: faker.name.findName() };
+    const request = normalizeRequest({ data, multipart: true });
+    expect(request).to.exist;
+    expect(request.data).to.exist.and.be.an.instanceof(FormData);
+    expect(request.headers).to.exist;
+    expect(request.headers['content-type']).to.contain(
+      'multipart/form-data; boundary'
+    );
+  });
+
+  it('should normalize json data to form data request via headers', () => {
+    const data = { name: faker.name.findName() };
+    const headers = { 'Content-Type': 'multipart/form-data' };
+    const request = normalizeRequest({ data, headers });
+    expect(request).to.exist;
+    expect(request.data).to.exist.and.be.an.instanceof(FormData);
+    expect(request.headers).to.exist;
+    expect(request.headers['content-type']).to.contain(
+      'multipart/form-data; boundary'
+    );
+  });
+
+  it('should normalize json data to form data request via headers', () => {
+    const data = { name: faker.name.findName() };
+    const headers = { 'content-type': 'multipart/form-data' };
+    const request = normalizeRequest({ data, headers });
+    expect(request).to.exist;
+    expect(request.data).to.exist.and.be.an.instanceof(FormData);
+    expect(request.headers).to.exist;
+    expect(request.headers['content-type']).to.contain(
+      'multipart/form-data; boundary'
+    );
   });
 
   it('should map response to data', () => {

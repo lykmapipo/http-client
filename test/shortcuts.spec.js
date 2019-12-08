@@ -1,7 +1,7 @@
-import nock from 'nock';
-import { expect } from '@lykmapipo/test-helpers';
+import { expect, nock } from '@lykmapipo/test-helpers';
 import {
   disposeHttpClient,
+  toFormData,
   request,
   all,
   spread,
@@ -279,6 +279,86 @@ describe('client shortcuts', () => {
       expect(error.message).to.be.equal('Missing Payload');
       done();
     });
+  });
+
+  // multipart
+  it('should send http post multipart request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { age: 11 };
+    nock(process.env.BASE_URL)
+      .post('/users')
+      .query(true)
+      .reply(201, function onReply() {
+        expect(this.req.headers).to.exist;
+        expect(this.req.headers['content-type']).to.contain(
+          'multipart/form-data; boundary'
+        );
+        return data;
+      });
+
+    post('/users', toFormData(data))
+      .then(user => {
+        expect(user).to.exist;
+        expect(user).to.exist;
+        expect(user).to.be.eql(data);
+        done(null, user);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should send http put multipart request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { age: 11 };
+    nock(process.env.BASE_URL)
+      .put('/users')
+      .query(true)
+      .reply(201, function onReply() {
+        expect(this.req.headers).to.exist;
+        expect(this.req.headers['content-type']).to.contain(
+          'multipart/form-data; boundary'
+        );
+        return data;
+      });
+
+    put('/users', data, { multipart: true })
+      .then(user => {
+        expect(user).to.exist;
+        expect(user).to.exist;
+        expect(user).to.be.eql(data);
+        done(null, user);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should send http patch multipart request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { age: 11 };
+    const headers = { 'Content-Type': 'multipart/form-data' };
+    nock(process.env.BASE_URL)
+      .patch('/users')
+      .query(true)
+      .reply(201, function onReply() {
+        expect(this.req.headers).to.exist;
+        expect(this.req.headers['content-type']).to.contain(
+          'multipart/form-data; boundary'
+        );
+        return data;
+      });
+
+    patch('/users', data, { headers })
+      .then(user => {
+        expect(user).to.exist;
+        expect(user).to.exist;
+        expect(user).to.be.eql(data);
+        done(null, user);
+      })
+      .catch(error => {
+        done(error);
+      });
   });
 
   afterEach(() => {

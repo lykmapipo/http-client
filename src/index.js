@@ -1,6 +1,13 @@
 import { isEmpty } from 'lodash';
 import axios from 'axios';
-import { withDefaults, wrapRequest, isFormData, toFormData } from './utils';
+
+import {
+  withDefaults,
+  normalizeRequest,
+  wrapRequest,
+  isFormData,
+  toFormData,
+} from './utils';
 
 // locals
 let httpClient;
@@ -87,7 +94,7 @@ export const request = optns => {
   const client = createHttpClient(requestOptions);
 
   // issue http(s) request
-  return client.request(requestOptions);
+  return client.request(normalizeRequest(requestOptions));
 };
 
 /**

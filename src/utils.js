@@ -1,60 +1,9 @@
-import { forEach } from 'lodash';
+import { forEach, isFunction, startsWith, toLower } from 'lodash';
 import FormData from 'form-data';
 import { mergeObjects, assign } from '@lykmapipo/common';
 import { getString } from '@lykmapipo/env';
 
 export const CONTENT_TYPE = 'application/json';
-
-/**
- * @function isFormData
- * @name isFormData
- * @description Determine if a value is a FormData
- * @param {*} value data to test
- * @returns {boolean} true if value is an FormData, otherwise false
- * @author lally elias <lallyelias87@mail.com>
- * @license MIT
- * @since 0.1.0
- * @version 0.1.0
- * @static
- * @public
- * @example
- *
- * isFormData({});
- * // => false;
- *
- * * isFormData(new FormData());
- * // => true;
- */
-export const isFormData = value => {
-  return typeof FormData !== 'undefined' && value instanceof FormData;
-};
-
-/**
- * @function toFormData
- * @name toFormData
- * @description Convert given plain object to form data instance
- * @param {object} [data={}] valid data
- * @returns {object} valid form data instance
- * @author lally elias <lallyelias87@mail.com>
- * @license MIT
- * @since 0.1.0
- * @version 0.1.0
- * @static
- * @public
- * @example
- *
- * const data = toFormData({ ... });
- * // => FormData{ ... };
- */
-export const toFormData = (data = {}) => {
-  const form = new FormData();
-  forEach(data, (value, key) => {
-    if (key && value) {
-      form.append(key, value);
-    }
-  });
-  return form;
-};
 
 /**
  * @function withDefaults
@@ -86,6 +35,106 @@ export const withDefaults = optns => {
 
   // return options
   return options;
+};
+
+/**
+ * @function isFormData
+ * @name isFormData
+ * @description Determine if a value is a FormData
+ * @param {*} value data to test
+ * @returns {boolean} true if value is an FormData, otherwise false
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * isFormData({});
+ * // => false;
+ *
+ * * isFormData(new FormData());
+ * // => true;
+ */
+export const isFormData = value => {
+  return typeof FormData !== 'undefined' && value instanceof FormData;
+};
+
+/**
+ * @function toFormData
+ * @name toFormData
+ * @description Convert given plain object to form data instance
+ * @param {object} [data={}] valid data
+ * @returns {object} valid form data instance
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const data = toFormData({ ... });
+ * // => FormData{ ... };
+ */
+export const toFormData = (data = {}) => {
+  const form = new FormData();
+  forEach(data, (value, key) => {
+    if (key && value) {
+      form.append(key, value);
+    }
+  });
+  return form;
+};
+
+/**
+ * @function normalizeRequest
+ * @name normalizeRequest
+ * @description Normalize http request with sensible config
+ * @param {object} [request={}] valid request options
+ * @returns {object} normalize request options
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const request = normalizeRequest({ ... }).
+ * // => { ... };
+ */
+export const normalizeRequest = request => {
+  // obtaion request parts
+  let { headers = {}, data = {}, multipart = false } = request;
+
+  // check for multipart
+  const contentType = headers['content-type'] || headers['Content-Type'];
+  multipart = multipart || startsWith(toLower(contentType), 'multipart');
+
+  // check for multipart flag
+  if (multipart) {
+    if (!isFormData(data)) {
+      data = toFormData(data);
+    }
+  }
+
+  // handle form data
+  if (isFormData(data)) {
+    let extraHeaders = {};
+    if (isFunction(data.getHeaders)) {
+      extraHeaders = data.getHeaders();
+    }
+    headers = mergeObjects(headers, extraHeaders);
+  }
+
+  // update request
+  request.headers = headers;
+  request.data = data;
+
+  // return normalize request
+  return request;
 };
 
 /**

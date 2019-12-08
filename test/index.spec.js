@@ -1,5 +1,4 @@
-import nock from 'nock';
-import { expect, faker } from '@lykmapipo/test-helpers';
+import { expect, faker, nock } from '@lykmapipo/test-helpers';
 import { CONTENT_TYPE } from '../src/utils';
 import { createHttpClient, disposeHttpClient } from '../src';
 
