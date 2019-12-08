@@ -82,6 +82,7 @@ export const toFormData = (data = {}) => {
   const form = new FormData();
   forEach(data, (value, key) => {
     if (key && value) {
+      // TODO: handle object value
       form.append(key, value);
     }
   });
@@ -124,6 +125,8 @@ export const normalizeRequest = request => {
   if (isFormData(data)) {
     let extraHeaders = {};
     if (isFunction(data.getHeaders)) {
+      delete headers['content-type'];
+      delete headers['Content-Type'];
       extraHeaders = data.getHeaders();
     }
     headers = mergeObjects(headers, extraHeaders);

@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash';
 import axios from 'axios';
+import { mergeObjects } from '@lykmapipo/common';
 
 import {
   withDefaults,
@@ -369,5 +370,49 @@ export const put = (url, data, optns = {}) => {
     return Promise.reject(new Error('Missing Payload'));
   }
   const requestOptions = { method: 'PUT', url, data, ...optns };
+  return wrapRequest(request(requestOptions));
+};
+
+/**
+ * @function sendFile
+ * @name sendFile
+ * @description Issue http multipart request to specified url.
+ * @param {string} url valid http path.
+ * @param {object} data request payload to be encoded on http request body
+ * @param {object} [optns={}] valid request options.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * // send stream
+ * const image = fs.createReadStream(imagePath);
+ * sendFile('/files', { image })
+ *   .then(file => { ... })
+ *   .catch(error => { ... });
+ *
+ * // send buffer
+ * const image = fs.readFileSync(imagePath);
+ * sendFile('/files/5c1766243', { image }, { method: 'PATCH'})
+ *   .then(file => { ... })
+ *   .catch(error => { ... });
+ *
+ * // send form data
+ * const image = document.getElementById('file').files[0];
+ * sendFile('/files', { image })
+ *   .then(file => { ... })
+ *   .catch(error => { ... });
+ */
+export const sendFile = (url, data, optns) => {
+  if (!data || isEmpty(data)) {
+    return Promise.reject(new Error('Missing Payload'));
+  }
+  const opts = mergeObjects(optns, { multipart: true });
+  const requestOptions = { method: 'POST', url, data, ...opts };
   return wrapRequest(request(requestOptions));
 };

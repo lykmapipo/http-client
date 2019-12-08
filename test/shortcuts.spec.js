@@ -1,3 +1,4 @@
+import { createReadStream, readFileSync } from 'fs';
 import { expect, nock } from '@lykmapipo/test-helpers';
 import {
   disposeHttpClient,
@@ -12,6 +13,7 @@ import {
   patch,
   post,
   put,
+  sendFile,
 } from '../src';
 
 describe('client shortcuts', () => {
@@ -355,6 +357,60 @@ describe('client shortcuts', () => {
         expect(user).to.exist;
         expect(user).to.be.eql(data);
         done(null, user);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  // file
+  it.skip('should send file stream via http post multipart request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { name: 'image.png' };
+    nock(process.env.BASE_URL)
+      .post('/files')
+      .reply(201, function onReply() {
+        expect(this.req.headers).to.exist;
+        expect(this.req.headers['content-type']).to.contain(
+          'multipart/form-data; boundary'
+        );
+        return data;
+      });
+
+    const image = createReadStream(`${__dirname}/fixtures/image.png`);
+    sendFile('/files', { image })
+      .then(file => {
+        expect(file).to.exist;
+        expect(file).to.exist;
+        expect(file).to.be.eql(data);
+        done(null, file);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should send file buffer via http post multipart request', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { name: 'image.png' };
+    nock(process.env.BASE_URL)
+      .post('/files')
+      .query(true)
+      .reply(201, function onReply() {
+        expect(this.req.headers).to.exist;
+        expect(this.req.headers['content-type']).to.contain(
+          'multipart/form-data; boundary'
+        );
+        return data;
+      });
+
+    const image = readFileSync(`${__dirname}/fixtures/image.png`);
+    sendFile('/files', { image })
+      .then(file => {
+        expect(file).to.exist;
+        expect(file).to.exist;
+        expect(file).to.be.eql(data);
+        done(null, file);
       })
       .catch(error => {
         done(error);
