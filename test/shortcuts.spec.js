@@ -3,6 +3,8 @@ import { expect } from '@lykmapipo/test-helpers';
 import {
   disposeHttpClient,
   request,
+  all,
+  spread,
   del,
   get,
   head,
@@ -34,6 +36,33 @@ describe('client shortcuts', () => {
         expect(response.data).to.exist;
         done(null, data);
       })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should issue requests in parallel', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { data: [] };
+    nock(process.env.BASE_URL)
+      .get('/roles')
+      .query(true)
+      .reply(200, data);
+    nock(process.env.BASE_URL)
+      .get('/users')
+      .query(true)
+      .reply(200, data);
+
+    all(request({ url: '/roles' }), request({ url: '/users' }))
+      .then(
+        spread((roles, users) => {
+          expect(roles).to.exist;
+          expect(roles.data).to.exist;
+          expect(users).to.exist;
+          expect(users.data).to.exist;
+          done(null, data);
+        })
+      )
       .catch(error => {
         done(error);
       });
@@ -73,6 +102,31 @@ describe('client shortcuts', () => {
         expect(users).to.be.eql(data);
         done(null, data);
       })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should issue get requests in parallel', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { data: [] };
+    nock(process.env.BASE_URL)
+      .get('/roles')
+      .query(true)
+      .reply(200, data);
+    nock(process.env.BASE_URL)
+      .get('/users')
+      .query(true)
+      .reply(200, data);
+
+    all(get('/roles'), get('/users'))
+      .then(
+        spread((roles, users) => {
+          expect(roles).to.exist;
+          expect(users).to.exist;
+          done(null, data);
+        })
+      )
       .catch(error => {
         done(error);
       });

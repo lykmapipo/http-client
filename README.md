@@ -26,7 +26,11 @@ npm install --save @lykmapipo/http-client
 ## Usage
 
 ```js
-import { del, get, head, options, patch, post, put } from '@lykmapipo/http-client';
+import { 
+  all, spread,
+  del, get, head, 
+  options, patch, post, put 
+} from '@lykmapipo/http-client';
 
 del('/users/5c1766243').then(user => { ... }).catch(error => { ... });
 
@@ -43,6 +47,10 @@ patch('/users/5c1766243', data).then(user => { ... }).catch(error => { ... });
 post('/users', data).then(user => { ... }).catch(error => { ... });
 
 put('/users/5c1766243', data).then(user => { ... }).catch(error => { ... });
+
+all(get('/roles'), get('/users'))
+  .then(spread((roles, users) => { ... }))
+  .catch(error => { ... })
 ```
 
 ## Environment

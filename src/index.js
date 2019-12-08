@@ -63,8 +63,8 @@ export const disposeHttpClient = () => {
  * @name request
  * @description Issue http request using given options.
  * @param {object} optns valid request options
- * @returns {Promise} promise resolve with raw http response on success or error
- * on failure.
+ * @returns {Promise} promise resolve with raw http response on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -88,12 +88,55 @@ export const request = optns => {
 };
 
 /**
+ * @function spread
+ * @name spread
+ * @description Flattened array fullfillment to the formal parameters of
+ * the fulfillment handler.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const getRoles = get('/roles');
+ * const getUsers = get('/users');
+ * const requests = all(getRoles(), getUsers());
+ * request.then(spread((roles, users) => { ... }));
+ */
+export const spread = axios.spread; // eslint-disable-line
+
+/**
+ * @function all
+ * @name all
+ * @description Performing multiple concurrent http requests.
+ * @param {object[]} requests valid http requests
+ * @returns {Promise} promise resolve with http response on success
+ * or error on failure.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const getRoles = get('/roles');
+ * const getUsers = get('/users');
+ * const requests = all(getRoles(), getUsers());
+ * request.then(spread((roles, users) => { ... }));
+ */
+export const all = (...requests) => axios.all([...requests]);
+
+/**
  * @function del
  * @name del
  * @description Issue http delete request to specified url.
  * @param {string} url valid http path.
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -118,7 +161,8 @@ export const del = (url, optns = {}) => {
  * @param {object} [optns={}] valid request options.
  * @param {object} [optns.params] params that will be encoded into url
  * query params.
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -147,8 +191,8 @@ export const get = (url, optns = {}) => {
  * @description Issue http head request to specified url.
  * @param {string} url valid http path.
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with raw http response on success or error
- * on failure.
+ * @returns {Promise} promise resolve with raw http response on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -171,8 +215,8 @@ export const head = (url, optns = {}) => {
  * @description Issue http options request to specified url.
  * @param {string} url valid http path.
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with raw http response on success or error
- * on failure.
+ * @returns {Promise} promise resolve with raw http response on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -196,7 +240,8 @@ export const options = (url, optns = {}) => {
  * @param {string} url valid http path.
  * @param {object} data request payload to be encoded on http request body
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -223,7 +268,8 @@ export const patch = (url, data, optns = {}) => {
  * @param {string} url valid http path.
  * @param {object} data request payload to be encoded on http request body
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
@@ -250,7 +296,8 @@ export const post = (url, data, optns = {}) => {
  * @param {string} url valid http path.
  * @param {object} data request payload to be encoded on http request body
  * @param {object} [optns={}] valid request options.
- * @returns {Promise} promise resolve with data on success or error on failure.
+ * @returns {Promise} promise resolve with data on success
+ * or error on failure.
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
