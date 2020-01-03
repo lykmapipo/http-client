@@ -38,6 +38,7 @@ export const createHttpClient = optns => {
   if (!httpClient) {
     // merge with given request options
     const clientOptions = withDefaults(optns);
+    // TODO: ignore baseURL to allow multi endpoint usage
 
     // create http client
     httpClient = axios.create(clientOptions);
@@ -96,6 +97,7 @@ export const request = optns => {
   const client = createHttpClient(requestOptions);
 
   // issue http(s) request
+  // TODO: ensure baseURL on requestOptions
   return client.request(normalizeRequest(requestOptions));
 };
 
