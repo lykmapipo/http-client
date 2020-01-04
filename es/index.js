@@ -1,6 +1,8 @@
-import { forEach, startsWith, toLower, isFunction, isEmpty } from 'lodash';
+import { forEach, isEmpty, startsWith, toLower, isFunction, omit } from 'lodash';
 import axios from 'axios';
-import { mergeObjects, assign } from '@lykmapipo/common';
+import { mergeObjects, isNode, assign } from '@lykmapipo/common';
+import http from 'http';
+import https from 'https';
 import FormData from 'form-data';
 import { getString } from '@lykmapipo/env';
 
@@ -36,6 +38,59 @@ const withDefaults = optns => {
 
   // return options
   return options;
+};
+
+/**
+ * @function createAgents
+ * @name createAgents
+ * @description Create http or https agent from options.
+ * @param {object} [optns] provided request options
+ * @param {object} [optns.agentOptions] valid http(s) agent options
+ * @param {string} [optns.agentOptions.ca] valid ca
+ * @param {string} [optns.agentOptions.cert] valid cert
+ * @param {string} [optns.agentOptions.key] valid key
+ * @param {string} [optns.agentOptions.passphrase] valid passphrase
+ * @returns {object} valid http or https agent
+ * @see {@link https://github.com/request/request#using-optionsagentoptions}
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.3.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const optns = {
+ *  agentOptions: {
+ *   cert: fs.readFileSync(certFilePath),
+ *   key: fs.readFileSync(keyFilePath),
+ *   passphrase: 'password',
+ *   ca: fs.readFileSync(caFilePath),
+ *   ...
+ *  }
+ * };
+ *
+ * const options = createAgents(optns);
+ * // => { httpAgent: ..., httpsAgent: ... };
+ */
+const createAgents = optns => {
+  // refs
+  let httpAgent;
+  let httpsAgent;
+
+  // create http agents, if node runtime
+  if (isNode) {
+    // create agents if there is options
+    let { agentOptions = {} } = withDefaults(optns);
+    if (!isEmpty(agentOptions)) {
+      agentOptions = mergeObjects({ keepAlive: true }, agentOptions);
+      httpAgent = new http.Agent(agentOptions);
+      httpsAgent = new https.Agent(agentOptions);
+    }
+  }
+
+  // return agents
+  return { httpAgent, httpsAgent };
 };
 
 /**
@@ -268,8 +323,9 @@ let httpClient;
 const createHttpClient = optns => {
   // try create http client
   if (!httpClient) {
-    // merge with given request options
-    const clientOptions = withDefaults(optns);
+    // merge with given request options,
+    // but: ignore baseURL to allow multi endpoints usage
+    const clientOptions = omit(withDefaults(optns), 'baseURL');
 
     // create http client
     httpClient = axios.create(clientOptions);
@@ -311,7 +367,7 @@ const disposeHttpClient = () => {
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  * @static
  * @public
  * @example
@@ -321,11 +377,18 @@ const disposeHttpClient = () => {
  *   .catch(error => { ... });
  */
 const request = optns => {
-  // ensure options
-  const requestOptions = withDefaults(optns);
+  // ensure options,
+  // also: ensure baseURL on requestOptions
+  const options = withDefaults(optns);
 
   // ensure http client
-  const client = createHttpClient(requestOptions);
+  const client = createHttpClient(options);
+
+  // create http agents
+  const agents = createAgents(options);
+
+  // prepare request options
+  const requestOptions = mergeObjects(options, agents);
 
   // issue http(s) request
   return client.request(normalizeRequest(requestOptions));

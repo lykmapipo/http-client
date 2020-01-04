@@ -31,6 +31,53 @@ const options = withDefaults(optns);
 
 
 
+#### createAgents([optns]) 
+
+Create http or https agent from options.
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| optns | `object`  | provided request options | *Optional* |
+| optns.agentOptions | `object`  | valid http(s) agent options | *Optional* |
+| optns.agentOptions.ca | `string`  | valid ca | *Optional* |
+| optns.agentOptions.cert | `string`  | valid cert | *Optional* |
+| optns.agentOptions.key | `string`  | valid key | *Optional* |
+| optns.agentOptions.passphrase | `string`  | valid passphrase | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+
+const optns = {
+ agentOptions: {
+  cert: fs.readFileSync(certFilePath),
+  key: fs.readFileSync(keyFilePath),
+  passphrase: 'password',
+  ca: fs.readFileSync(caFilePath),
+  ...
+ }
+};
+
+const options = createAgents(optns);
+// => { httpAgent: ..., httpsAgent: ... };
+```
+
+
+##### Returns
+
+
+- `object`  valid http or https agent
+
+
+
 #### isFormData(value) 
 
 Determine if a value is a FormData

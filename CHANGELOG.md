@@ -1,3 +1,20 @@
+#### 0.3.0 (2020-01-04)
+
+##### Chores
+
+* **deps:**
+  *  force latest version & audit fix ([8bae3905](https://github.com/lykmapipo/http-client/commit/8bae39050bd6b3b65902ff4869bb2342840bf0b1))
+  *  force latest version & audit fix ([cba32046](https://github.com/lykmapipo/http-client/commit/cba32046084cf23c278abbd987e6b1ac26fd5a3b))
+
+##### New Features
+
+* **request:**  support tls/ssl protocol options ([0a12ec2c](https://github.com/lykmapipo/http-client/commit/0a12ec2cf895f52275ee360a09dfb682c2cf26cf))
+* **agents:**  add create agents utility ([be9dd5b1](https://github.com/lykmapipo/http-client/commit/be9dd5b1acf19bb76291c5b8b26cf6bfce6cd58f))
+
+##### Refactors
+
+* **client:**  allow re-use for multiple baseURL ([cbd24f00](https://github.com/lykmapipo/http-client/commit/cbd24f00de18ce8e84354e5872326c15086f3f32))
+
 #### 0.2.0 (2019-12-08)
 
 ##### Chores
