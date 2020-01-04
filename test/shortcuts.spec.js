@@ -418,6 +418,14 @@ describe('client shortcuts', () => {
       });
   });
 
+  it('should fail if no data when send file', done => {
+    sendFile('/files').catch(error => {
+      expect(error).to.exist;
+      expect(error.message).to.be.equal('Missing Payload');
+      done();
+    });
+  });
+
   it('should fetch file via http get request', done => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     nock(process.env.BASE_URL)

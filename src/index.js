@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty, omit } from 'lodash';
 import axios from 'axios';
 import { mergeObjects } from '@lykmapipo/common';
 
@@ -36,9 +36,9 @@ export { isFormData, toFormData };
 export const createHttpClient = optns => {
   // try create http client
   if (!httpClient) {
-    // merge with given request options
-    const clientOptions = withDefaults(optns);
-    // TODO: ignore baseURL to allow multi endpoint usage
+    // merge with given request options,
+    // but: ignore baseURL to allow multi endpoints usage
+    const clientOptions = omit(withDefaults(optns), 'baseURL');
 
     // create http client
     httpClient = axios.create(clientOptions);
@@ -90,14 +90,14 @@ export const disposeHttpClient = () => {
  *   .catch(error => { ... });
  */
 export const request = optns => {
-  // ensure options
+  // ensure options,
+  // also: ensure baseURL on requestOptions
   const requestOptions = withDefaults(optns);
 
   // ensure http client
   const client = createHttpClient(requestOptions);
 
   // issue http(s) request
-  // TODO: ensure baseURL on requestOptions
   return client.request(normalizeRequest(requestOptions));
 };
 
