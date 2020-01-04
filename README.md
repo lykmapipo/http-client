@@ -46,6 +46,18 @@ put('/users/5c1766243', data).then(user => { ... }).catch(error => { ... });
 all(get('/roles'), get('/users'))
   .then(spread((roles, users) => { ... }))
   .catch(error => { ... });
+
+// with TLS/SSL Protocol options
+const optns = {
+  url: '/users',
+  agentOptions: {
+    ca: fs.readFileSync(CA_FILE_PATH),
+    cert: fs.readFileSync(CERT_FILE_PATH),
+    key: fs.readFileSync(KEY_FILE_PATH),
+    passphrase: 'password',
+  },
+};
+get(optns).then(users => { ... }).catch(error => { ... });
 ```
 
 ## Environment

@@ -16,8 +16,6 @@ const CA_FILE_PATH = `${__dirname}/fixtures/ssl/root.pem`;
 const CERT_FILE_PATH = `${__dirname}/fixtures/ssl/test.crt`;
 const KEY_FILE_PATH = `${__dirname}/fixtures/ssl/test.key`;
 
-const readFile = path => readFileSync(path, 'UTF-8');
-
 describe('client utils', () => {
   it('should check form data value', () => {
     expect(isFormData('a')).to.be.false;
@@ -37,7 +35,7 @@ describe('client utils', () => {
     const options = {
       agentOptions: {
         ca: readFileSync(CA_FILE_PATH),
-        cert: readFile(CERT_FILE_PATH),
+        cert: readFileSync(CERT_FILE_PATH),
         key: readFileSync(KEY_FILE_PATH),
         passphrase: 'password',
       },

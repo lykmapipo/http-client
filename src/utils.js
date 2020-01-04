@@ -53,7 +53,7 @@ export const withDefaults = optns => {
  * @see {@link https://github.com/request/request#using-optionsagentoptions}
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
- * @since 0.2.0
+ * @since 0.3.0
  * @version 0.1.0
  * @static
  * @public

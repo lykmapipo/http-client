@@ -4,6 +4,7 @@ import { mergeObjects } from '@lykmapipo/common';
 
 import {
   withDefaults,
+  createAgents,
   normalizeRequest,
   wrapRequest,
   isFormData,
@@ -80,7 +81,7 @@ export const disposeHttpClient = () => {
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  * @static
  * @public
  * @example
@@ -92,12 +93,16 @@ export const disposeHttpClient = () => {
 export const request = optns => {
   // ensure options,
   // also: ensure baseURL on requestOptions
-  const requestOptions = withDefaults(optns);
+  const options = withDefaults(optns);
 
   // ensure http client
-  const client = createHttpClient(requestOptions);
+  const client = createHttpClient(options);
 
-  // TODO: create http agents
+  // create http agents
+  const agents = createAgents(options);
+
+  // prepare request options
+  const requestOptions = mergeObjects(options, agents);
 
   // issue http(s) request
   return client.request(normalizeRequest(requestOptions));

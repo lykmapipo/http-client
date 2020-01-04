@@ -1,4 +1,6 @@
 import { createReadStream, readFileSync } from 'fs';
+import http from 'http';
+import https from 'https';
 import { expect, nock } from '@lykmapipo/test-helpers';
 import {
   disposeHttpClient,
@@ -17,6 +19,10 @@ import {
   fetchFile,
 } from '../src';
 
+const CA_FILE_PATH = `${__dirname}/fixtures/ssl/root.pem`;
+const CERT_FILE_PATH = `${__dirname}/fixtures/ssl/test.crt`;
+const KEY_FILE_PATH = `${__dirname}/fixtures/ssl/test.key`;
+
 describe('client shortcuts', () => {
   beforeEach(() => {
     delete process.env.BASE_URL;
@@ -34,6 +40,70 @@ describe('client shortcuts', () => {
       .reply(200, data);
 
     request({ url: '/users' })
+      .then(response => {
+        expect(response).to.exist;
+        expect(response.data).to.exist;
+        done(null, data);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should send http request with agent', done => {
+    process.env.BASE_URL = 'http://127.0.0.1/v1/';
+    const data = { data: [] };
+    nock(process.env.BASE_URL)
+      .get('/users')
+      .query(true)
+      .reply(200, function onReply() {
+        expect(this.req.options.agent).to.be.an.instanceof(http.Agent);
+        return data;
+      });
+
+    const optns = {
+      url: '/users',
+      agentOptions: {
+        ca: readFileSync(CA_FILE_PATH),
+        cert: readFileSync(CERT_FILE_PATH),
+        key: readFileSync(KEY_FILE_PATH),
+        passphrase: 'password',
+      },
+    };
+
+    request(optns)
+      .then(response => {
+        expect(response).to.exist;
+        expect(response.data).to.exist;
+        done(null, data);
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+
+  it('should send https request with agent', done => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const data = { data: [] };
+    nock(process.env.BASE_URL)
+      .get('/users')
+      .query(true)
+      .reply(200, function onReply() {
+        expect(this.req.options.agent).to.be.an.instanceof(https.Agent);
+        return data;
+      });
+
+    const optns = {
+      url: '/users',
+      agentOptions: {
+        ca: readFileSync(CA_FILE_PATH),
+        cert: readFileSync(CERT_FILE_PATH),
+        key: readFileSync(KEY_FILE_PATH),
+        passphrase: 'password',
+      },
+    };
+
+    request(optns)
       .then(response => {
         expect(response).to.exist;
         expect(response.data).to.exist;
