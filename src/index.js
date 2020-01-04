@@ -97,6 +97,8 @@ export const request = optns => {
   // ensure http client
   const client = createHttpClient(requestOptions);
 
+  // TODO: create http agents
+
   // issue http(s) request
   return client.request(normalizeRequest(requestOptions));
 };

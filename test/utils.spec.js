@@ -1,7 +1,9 @@
+import { readFileSync } from 'fs';
 import { expect, faker } from '@lykmapipo/test-helpers';
 import FormData from 'form-data';
 import {
   withDefaults,
+  createAgents,
   isFormData,
   toFormData,
   normalizeRequest,
@@ -10,12 +12,40 @@ import {
   wrapRequest,
 } from '../src/utils';
 
+const CA_FILE_PATH = `${__dirname}/fixtures/ssl/root.pem`;
+const CERT_FILE_PATH = `${__dirname}/fixtures/ssl/test.crt`;
+const KEY_FILE_PATH = `${__dirname}/fixtures/ssl/test.key`;
+
+const readFile = path => readFileSync(path, 'UTF-8');
+
 describe('client utils', () => {
   it('should check form data value', () => {
     expect(isFormData('a')).to.be.false;
     expect(isFormData(1)).to.be.false;
     expect(isFormData({})).to.be.false;
     expect(isFormData(new FormData())).to.be.true;
+  });
+
+  it('should not create http agents when no options', () => {
+    const agents = createAgents();
+    expect(agents).to.exist;
+    expect(agents.httpAgent).to.not.exist;
+    expect(agents.httpsAgent).to.not.exist;
+  });
+
+  it('should create http agents with options', () => {
+    const options = {
+      agentOptions: {
+        ca: readFileSync(CA_FILE_PATH),
+        cert: readFile(CERT_FILE_PATH),
+        key: readFileSync(KEY_FILE_PATH),
+        passphrase: 'password',
+      },
+    };
+    const agents = createAgents(options);
+    expect(agents).to.exist;
+    expect(agents.httpAgent).to.exist;
+    expect(agents.httpsAgent).to.exist;
   });
 
   it('should create form data', () => {

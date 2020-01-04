@@ -1,6 +1,8 @@
-import { forEach, isFunction, startsWith, toLower } from 'lodash';
+import http from 'http';
+import https from 'https';
+import { forEach, isEmpty, isFunction, startsWith, toLower } from 'lodash';
 import FormData from 'form-data';
-import { mergeObjects, assign } from '@lykmapipo/common';
+import { isNode, mergeObjects, assign } from '@lykmapipo/common';
 import { getString } from '@lykmapipo/env';
 
 export const CONTENT_TYPE = 'application/json';
@@ -35,6 +37,59 @@ export const withDefaults = optns => {
 
   // return options
   return options;
+};
+
+/**
+ * @function createAgents
+ * @name createAgents
+ * @description Create http or https agent from options.
+ * @param {object} [optns] provided request options
+ * @param {object} [optns.agentOptions] valid http(s) agent options
+ * @param {string} [optns.agentOptions.ca] valid ca
+ * @param {string} [optns.agentOptions.cert] valid cert
+ * @param {string} [optns.agentOptions.key] valid key
+ * @param {string} [optns.agentOptions.passphrase] valid passphrase
+ * @returns {object} valid http or https agent
+ * @see {@link https://github.com/request/request#using-optionsagentoptions}
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const optns = {
+ *  agentOptions: {
+ *   cert: fs.readFileSync(certFilePath),
+ *   key: fs.readFileSync(keyFilePath),
+ *   passphrase: 'password',
+ *   ca: fs.readFileSync(caFilePath),
+ *   ...
+ *  }
+ * };
+ *
+ * const options = createAgents(optns);
+ * // => { httpAgent: ..., httpsAgent: ... };
+ */
+export const createAgents = optns => {
+  // refs
+  let httpAgent;
+  let httpsAgent;
+
+  // create http agents, if node runtime
+  if (isNode) {
+    // create agents if there is options
+    let { agentOptions = {} } = withDefaults(optns);
+    if (!isEmpty(agentOptions)) {
+      agentOptions = mergeObjects({ keepAlive: true }, agentOptions);
+      httpAgent = new http.Agent(agentOptions);
+      httpsAgent = new https.Agent(agentOptions);
+    }
+  }
+
+  // return agents
+  return { httpAgent, httpsAgent };
 };
 
 /**
