@@ -1,3 +1,9 @@
+#### 0.3.1 (2020-01-06)
+
+##### Bug Fixes
+
+*  force responseType per request ([ad7ab4c5](https://github.com/lykmapipo/http-client/commit/ad7ab4c55eb5275ad0d22a7b8e12e6411a401ffd))
+
 #### 0.3.0 (2020-01-04)
 
 ##### Chores
