@@ -7,6 +7,8 @@ import { getString } from '@lykmapipo/env';
 
 export const CONTENT_TYPE = 'application/json';
 
+export const RESPONSE_TYPE = 'json';
+
 /**
  * @function withDefaults
  * @name withDefaults
@@ -163,7 +165,12 @@ export const toFormData = (data = {}) => {
  */
 export const normalizeRequest = request => {
   // obtaion request parts
-  let { headers = {}, data = {}, multipart = false } = request;
+  let {
+    responseType = RESPONSE_TYPE,
+    headers = {},
+    data = {},
+    multipart = false,
+  } = request;
 
   // check for multipart
   const contentType = headers['content-type'] || headers['Content-Type'];
@@ -187,9 +194,13 @@ export const normalizeRequest = request => {
     headers = mergeObjects(headers, extraHeaders);
   }
 
+  // ensure responseType
+  responseType = isEmpty(responseType) ? RESPONSE_TYPE : responseType;
+
   // update request
   request.headers = headers;
   request.data = data;
+  request.responseType = responseType;
 
   // return normalize request
   return request;
