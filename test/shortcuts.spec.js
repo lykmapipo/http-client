@@ -31,26 +31,23 @@ describe('client shortcuts', () => {
     nock.cleanAll();
   });
 
-  it('should send http request', done => {
+  it('should send http request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { data: [] };
-    nock(process.env.BASE_URL)
-      .get('/users')
-      .query(true)
-      .reply(200, data);
+    nock(process.env.BASE_URL).get('/users').query(true).reply(200, data);
 
     request({ url: '/users' })
-      .then(response => {
+      .then((response) => {
         expect(response).to.exist;
         expect(response.data).to.exist;
         done(null, data);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should send http request with agent', done => {
+  it('should send http request with agent', (done) => {
     process.env.BASE_URL = 'http://127.0.0.1/v1/';
     const data = { data: [] };
     nock(process.env.BASE_URL)
@@ -72,17 +69,17 @@ describe('client shortcuts', () => {
     };
 
     request(optns)
-      .then(response => {
+      .then((response) => {
         expect(response).to.exist;
         expect(response.data).to.exist;
         done(null, data);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should send https request with agent', done => {
+  it('should send https request with agent', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { data: [] };
     nock(process.env.BASE_URL)
@@ -104,27 +101,21 @@ describe('client shortcuts', () => {
     };
 
     request(optns)
-      .then(response => {
+      .then((response) => {
         expect(response).to.exist;
         expect(response.data).to.exist;
         done(null, data);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should issue requests in parallel', done => {
+  it('should issue requests in parallel', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { data: [] };
-    nock(process.env.BASE_URL)
-      .get('/roles')
-      .query(true)
-      .reply(200, data);
-    nock(process.env.BASE_URL)
-      .get('/users')
-      .query(true)
-      .reply(200, data);
+    nock(process.env.BASE_URL).get('/roles').query(true).reply(200, data);
+    nock(process.env.BASE_URL).get('/users').query(true).reply(200, data);
 
     all(request({ url: '/roles' }), request({ url: '/users' }))
       .then(
@@ -136,12 +127,12 @@ describe('client shortcuts', () => {
           done(null, data);
         })
       )
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should send http delete request', done => {
+  it('should send http delete request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = {};
     nock(process.env.BASE_URL)
@@ -150,47 +141,38 @@ describe('client shortcuts', () => {
       .reply(200, data);
 
     del('/users/5c1766243')
-      .then(response => {
+      .then((response) => {
         expect(response).to.exist;
         expect(response).to.exist;
         expect(response).to.be.eql(data);
         done(null, data);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should send http get request', done => {
+  it('should send http get request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { data: [] };
-    nock(process.env.BASE_URL)
-      .get('/users')
-      .query(true)
-      .reply(200, data);
+    nock(process.env.BASE_URL).get('/users').query(true).reply(200, data);
 
     get('/users')
-      .then(users => {
+      .then((users) => {
         expect(users).to.exist;
         expect(users).to.be.eql(data);
         done(null, data);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should issue get requests in parallel', done => {
+  it('should issue get requests in parallel', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { data: [] };
-    nock(process.env.BASE_URL)
-      .get('/roles')
-      .query(true)
-      .reply(200, data);
-    nock(process.env.BASE_URL)
-      .get('/users')
-      .query(true)
-      .reply(200, data);
+    nock(process.env.BASE_URL).get('/roles').query(true).reply(200, data);
+    nock(process.env.BASE_URL).get('/users').query(true).reply(200, data);
 
     all(get('/roles'), get('/users'))
       .then(
@@ -200,12 +182,12 @@ describe('client shortcuts', () => {
           done(null, data);
         })
       )
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should send http head request', done => {
+  it('should send http head request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     nock(process.env.BASE_URL)
       .defaultReplyHeaders({
@@ -216,18 +198,18 @@ describe('client shortcuts', () => {
       .reply(200);
 
     head('/users/5c1766243')
-      .then(response => {
+      .then((response) => {
         expect(response).to.exist;
         expect(response).to.exist;
         expect(response.headers).to.exist;
         done(null, response);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should send http options request', done => {
+  it('should send http options request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     nock(process.env.BASE_URL)
       .defaultReplyHeaders({
@@ -238,18 +220,18 @@ describe('client shortcuts', () => {
       .reply(200);
 
     options('/users/5c1766243')
-      .then(response => {
+      .then((response) => {
         expect(response).to.exist;
         expect(response).to.exist;
         expect(response.headers).to.exist;
         done(null, response);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should send http patch request', done => {
+  it('should send http patch request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { age: 11 };
     nock(process.env.BASE_URL)
@@ -258,18 +240,18 @@ describe('client shortcuts', () => {
       .reply(200, data);
 
     patch('/users/5c1766243', data)
-      .then(user => {
+      .then((user) => {
         expect(user).to.exist;
         expect(user).to.exist;
         expect(user).to.be.eql(data);
         done(null, user);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should reject send http patch request if no payload', done => {
+  it('should reject send http patch request if no payload', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { age: 11 };
     nock(process.env.BASE_URL)
@@ -277,49 +259,43 @@ describe('client shortcuts', () => {
       .query(true)
       .reply(200, data);
 
-    patch('/users/5c1766243', {}).catch(error => {
+    patch('/users/5c1766243', {}).catch((error) => {
       expect(error).to.exist;
       expect(error.message).to.be.equal('Missing Payload');
       done();
     });
   });
 
-  it('should send http post request', done => {
+  it('should send http post request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { age: 11 };
-    nock(process.env.BASE_URL)
-      .post('/users')
-      .query(true)
-      .reply(201, data);
+    nock(process.env.BASE_URL).post('/users').query(true).reply(201, data);
 
     post('/users', data)
-      .then(user => {
+      .then((user) => {
         expect(user).to.exist;
         expect(user).to.exist;
         expect(user).to.be.eql(data);
         done(null, user);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should reject send http post request if no payload', done => {
+  it('should reject send http post request if no payload', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { age: 11 };
-    nock(process.env.BASE_URL)
-      .post('/users')
-      .query(true)
-      .reply(201, data);
+    nock(process.env.BASE_URL).post('/users').query(true).reply(201, data);
 
-    post('/users', {}).catch(error => {
+    post('/users', {}).catch((error) => {
       expect(error).to.exist;
       expect(error.message).to.be.equal('Missing Payload');
       done();
     });
   });
 
-  it('should send http put request', done => {
+  it('should send http put request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { age: 11 };
     nock(process.env.BASE_URL)
@@ -328,18 +304,18 @@ describe('client shortcuts', () => {
       .reply(200, data);
 
     put('/users/5c1766243', data)
-      .then(user => {
+      .then((user) => {
         expect(user).to.exist;
         expect(user).to.exist;
         expect(user).to.be.eql(data);
         done(null, user);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should reject send http put request if no payload', done => {
+  it('should reject send http put request if no payload', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { age: 11 };
     nock(process.env.BASE_URL)
@@ -347,7 +323,7 @@ describe('client shortcuts', () => {
       .query(true)
       .reply(200, data);
 
-    put('/users/5c1766243', {}).catch(error => {
+    put('/users/5c1766243', {}).catch((error) => {
       expect(error).to.exist;
       expect(error.message).to.be.equal('Missing Payload');
       done();
@@ -355,7 +331,7 @@ describe('client shortcuts', () => {
   });
 
   // multipart
-  it('should send http post multipart request', done => {
+  it('should send http post multipart request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { age: 11 };
     nock(process.env.BASE_URL)
@@ -370,18 +346,18 @@ describe('client shortcuts', () => {
       });
 
     post('/users', toFormData(data))
-      .then(user => {
+      .then((user) => {
         expect(user).to.exist;
         expect(user).to.exist;
         expect(user).to.be.eql(data);
         done(null, user);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should send http put multipart request', done => {
+  it('should send http put multipart request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { age: 11 };
     nock(process.env.BASE_URL)
@@ -396,18 +372,18 @@ describe('client shortcuts', () => {
       });
 
     put('/users', data, { multipart: true })
-      .then(user => {
+      .then((user) => {
         expect(user).to.exist;
         expect(user).to.exist;
         expect(user).to.be.eql(data);
         done(null, user);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should send http patch multipart request', done => {
+  it('should send http patch multipart request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { age: 11 };
     const headers = { 'Content-Type': 'multipart/form-data' };
@@ -423,19 +399,19 @@ describe('client shortcuts', () => {
       });
 
     patch('/users', data, { headers })
-      .then(user => {
+      .then((user) => {
         expect(user).to.exist;
         expect(user).to.exist;
         expect(user).to.be.eql(data);
         done(null, user);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
   // file
-  it.skip('should send file stream via http post multipart request', done => {
+  it.skip('should send file stream via http post multipart request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { name: 'image.png' };
     nock(process.env.BASE_URL)
@@ -450,18 +426,18 @@ describe('client shortcuts', () => {
 
     const image = createReadStream(`${__dirname}/fixtures/image.png`);
     sendFile('/files', { image })
-      .then(file => {
+      .then((file) => {
         expect(file).to.exist;
         expect(file).to.exist;
         expect(file).to.be.eql(data);
         done(null, file);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should send file buffer via http post multipart request', done => {
+  it('should send file buffer via http post multipart request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { name: 'image.png' };
     nock(process.env.BASE_URL)
@@ -477,26 +453,26 @@ describe('client shortcuts', () => {
 
     const image = readFileSync(`${__dirname}/fixtures/image.png`);
     sendFile('/files', { image })
-      .then(file => {
+      .then((file) => {
         expect(file).to.exist;
         expect(file).to.exist;
         expect(file).to.be.eql(data);
         done(null, file);
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });
 
-  it('should fail if no data when send file', done => {
-    sendFile('/files').catch(error => {
+  it('should fail if no data when send file', (done) => {
+    sendFile('/files').catch((error) => {
       expect(error).to.exist;
       expect(error.message).to.be.equal('Missing Payload');
       done();
     });
   });
 
-  it('should fetch file via http get request', done => {
+  it('should fetch file via http get request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     nock(process.env.BASE_URL)
       .get('/files/5c1766243')
@@ -507,11 +483,11 @@ describe('client shortcuts', () => {
       });
 
     fetchFile('/files/5c1766243')
-      .then(file => {
+      .then((file) => {
         expect(file).to.exist;
         done();
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });

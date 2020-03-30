@@ -34,7 +34,7 @@ export { isFormData, toFormData };
  * const optns = { baseURL: ... };
  * const httpClient = createHttpClient(optns);
  */
-export const createHttpClient = optns => {
+export const createHttpClient = (optns) => {
   // try create http client
   if (!httpClient) {
     // merge with given request options,
@@ -90,7 +90,7 @@ export const disposeHttpClient = () => {
  *   .then(response => { ... })
  *   .catch(error => { ... });
  */
-export const request = optns => {
+export const request = (optns) => {
   // ensure options,
   // also: ensure baseURL on requestOptions
   const options = withDefaults(optns);

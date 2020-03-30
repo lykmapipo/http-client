@@ -1,3 +1,9 @@
+#### 0.3.9 (2020-03-30)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([758895b5](https://github.com/lykmapipo/http-client/commit/758895b579df07e7a4eafc4c9f03e83b25f4afe7))
+
 #### 0.3.8 (2020-03-06)
 
 ##### Chores

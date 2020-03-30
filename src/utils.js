@@ -27,7 +27,7 @@ export const RESPONSE_TYPE = 'json';
  * const options = withDefaults(optns);
  * // => {baseUrl: ..., headers: { ... } };
  */
-export const withDefaults = optns => {
+export const withDefaults = (optns) => {
   // merge defaults
   const options = mergeObjects(
     {
@@ -74,7 +74,7 @@ export const withDefaults = optns => {
  * const options = createAgents(optns);
  * // => { httpAgent: ..., httpsAgent: ... };
  */
-export const createAgents = optns => {
+export const createAgents = (optns) => {
   // refs
   let httpAgent;
   let httpsAgent;
@@ -114,7 +114,7 @@ export const createAgents = optns => {
  * * isFormData(new FormData());
  * // => true;
  */
-export const isFormData = value => {
+export const isFormData = (value) => {
   return typeof FormData !== 'undefined' && value instanceof FormData;
 };
 
@@ -163,7 +163,7 @@ export const toFormData = (data = {}) => {
  * const request = normalizeRequest({ ... }).
  * // => { ... };
  */
-export const normalizeRequest = request => {
+export const normalizeRequest = (request) => {
   // obtaion request parts
   let {
     responseType = RESPONSE_TYPE,
@@ -223,7 +223,7 @@ export const normalizeRequest = request => {
  * const data = mapResponseToData(rawResponse).
  * // => { .. };
  */
-export const mapResponseToData = rawResponse => rawResponse.data;
+export const mapResponseToData = (rawResponse) => rawResponse.data;
 
 /**
  * @function mapResponseToError
@@ -243,7 +243,7 @@ export const mapResponseToData = rawResponse => rawResponse.data;
  * const error = mapResponseToError(rawResponse).
  * // => Error;
  */
-export const mapResponseToError = rawResponse => {
+export const mapResponseToError = (rawResponse) => {
   // obtain error details
   let { code, status, message, description, stack, errors, data } = rawResponse;
   const { request, response } = rawResponse;
@@ -306,6 +306,6 @@ export const mapResponseToError = rawResponse => {
  */
 export const wrapRequest = (request, skipData = false) => {
   return request
-    .then(response => (skipData ? response : mapResponseToData(response)))
-    .catch(response => Promise.reject(mapResponseToError(response)));
+    .then((response) => (skipData ? response : mapResponseToData(response)))
+    .catch((response) => Promise.reject(mapResponseToError(response)));
 };
