@@ -1,3 +1,9 @@
+#### 0.4.0 (2020-04-16)
+
+##### Bug Fixes
+
+*  allow stream file uploads ([ad9da759](https://github.com/lykmapipo/http-client/commit/ad9da759b44d4e70fe75294aa88daba7d1af1d9d))
+
 #### 0.3.10 (2020-04-15)
 
 ##### Chores

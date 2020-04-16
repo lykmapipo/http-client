@@ -1,6 +1,6 @@
 import { forEach, isEmpty, startsWith, toLower, isFunction, omit } from 'lodash';
 import axios from 'axios';
-import { mergeObjects, isNode, assign } from '@lykmapipo/common';
+import { safeMergeObjects, isNode, mergeObjects, assign } from '@lykmapipo/common';
 import http from 'http';
 import https from 'https';
 import FormData from 'form-data';
@@ -28,9 +28,9 @@ const RESPONSE_TYPE = 'json';
  * const options = withDefaults(optns);
  * // => {baseUrl: ..., headers: { ... } };
  */
-const withDefaults = optns => {
+const withDefaults = (optns) => {
   // merge defaults
-  const options = mergeObjects(
+  const options = safeMergeObjects(
     {
       baseURL: getString('BASE_URL') || getString('REACT_APP_BASE_URL'),
       headers: { Accept: CONTENT_TYPE, 'Content-Type': CONTENT_TYPE },
@@ -75,7 +75,7 @@ const withDefaults = optns => {
  * const options = createAgents(optns);
  * // => { httpAgent: ..., httpsAgent: ... };
  */
-const createAgents = optns => {
+const createAgents = (optns) => {
   // refs
   let httpAgent;
   let httpsAgent;
@@ -115,7 +115,7 @@ const createAgents = optns => {
  * * isFormData(new FormData());
  * // => true;
  */
-const isFormData = value => {
+const isFormData = (value) => {
   return typeof FormData !== 'undefined' && value instanceof FormData;
 };
 
@@ -164,7 +164,7 @@ const toFormData = (data = {}) => {
  * const request = normalizeRequest({ ... }).
  * // => { ... };
  */
-const normalizeRequest = request => {
+const normalizeRequest = (request) => {
   // obtaion request parts
   let {
     responseType = RESPONSE_TYPE,
@@ -175,7 +175,10 @@ const normalizeRequest = request => {
 
   // check for multipart
   const contentType = headers['content-type'] || headers['Content-Type'];
-  multipart = multipart || startsWith(toLower(contentType), 'multipart');
+  multipart =
+    multipart ||
+    startsWith(toLower(contentType), 'multipart') ||
+    isFormData(data);
 
   // check for multipart flag
   if (multipart) {
@@ -224,7 +227,7 @@ const normalizeRequest = request => {
  * const data = mapResponseToData(rawResponse).
  * // => { .. };
  */
-const mapResponseToData = rawResponse => rawResponse.data;
+const mapResponseToData = (rawResponse) => rawResponse.data;
 
 /**
  * @function mapResponseToError
@@ -244,7 +247,7 @@ const mapResponseToData = rawResponse => rawResponse.data;
  * const error = mapResponseToError(rawResponse).
  * // => Error;
  */
-const mapResponseToError = rawResponse => {
+const mapResponseToError = (rawResponse) => {
   // obtain error details
   let { code, status, message, description, stack, errors, data } = rawResponse;
   const { request, response } = rawResponse;
@@ -307,8 +310,8 @@ const mapResponseToError = rawResponse => {
  */
 const wrapRequest = (request, skipData = false) => {
   return request
-    .then(response => (skipData ? response : mapResponseToData(response)))
-    .catch(response => Promise.reject(mapResponseToError(response)));
+    .then((response) => (skipData ? response : mapResponseToData(response)))
+    .catch((response) => Promise.reject(mapResponseToError(response)));
 };
 
 // locals
@@ -331,7 +334,7 @@ let httpClient;
  * const optns = { baseURL: ... };
  * const httpClient = createHttpClient(optns);
  */
-const createHttpClient = optns => {
+const createHttpClient = (optns) => {
   // try create http client
   if (!httpClient) {
     // merge with given request options,
@@ -387,7 +390,7 @@ const disposeHttpClient = () => {
  *   .then(response => { ... })
  *   .catch(error => { ... });
  */
-const request = optns => {
+const request = (optns) => {
   // ensure options,
   // also: ensure baseURL on requestOptions
   const options = withDefaults(optns);
@@ -399,10 +402,13 @@ const request = optns => {
   const agents = createAgents(options);
 
   // prepare request options
-  const requestOptions = mergeObjects(options, agents);
+  const requestOptions = safeMergeObjects(options, agents);
+
+  // normalize request
+  const normalizedRequest = normalizeRequest(requestOptions);
 
   // issue http(s) request
-  return client.request(normalizeRequest(requestOptions));
+  return client.request(normalizedRequest);
 };
 
 /**
