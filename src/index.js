@@ -1,6 +1,6 @@
 import { isEmpty, omit } from 'lodash';
 import axios from 'axios';
-import { mergeObjects } from '@lykmapipo/common';
+import { mergeObjects, safeMergeObjects } from '@lykmapipo/common';
 
 import {
   withDefaults,
@@ -102,10 +102,13 @@ export const request = (optns) => {
   const agents = createAgents(options);
 
   // prepare request options
-  const requestOptions = mergeObjects(options, agents);
+  const requestOptions = safeMergeObjects(options, agents);
+
+  // normalize request
+  const normalizedRequest = normalizeRequest(requestOptions);
 
   // issue http(s) request
-  return client.request(normalizeRequest(requestOptions));
+  return client.request(normalizedRequest);
 };
 
 /**

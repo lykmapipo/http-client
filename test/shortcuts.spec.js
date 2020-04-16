@@ -357,6 +357,34 @@ describe('client shortcuts', () => {
       });
   });
 
+  it('should send http post multipart request with file', (done) => {
+    process.env.BASE_URL = 'https://127.0.0.1/v1/';
+    const image = createReadStream(`${__dirname}/fixtures/image.png`);
+    const age = 11;
+
+    nock(process.env.BASE_URL)
+      .post('/users')
+      .query(true)
+      .reply(201, function onReply() {
+        expect(this.req.headers).to.exist;
+        expect(this.req.headers['content-type']).to.contain(
+          'multipart/form-data; boundary'
+        );
+        return { age };
+      });
+
+    post('/users', toFormData({ age, image }))
+      .then((user) => {
+        expect(user).to.exist;
+        expect(user).to.exist;
+        expect(user).to.be.eql({ age });
+        done(null, user);
+      })
+      .catch((error) => {
+        done(error);
+      });
+  });
+
   it('should send http put multipart request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { age: 11 };
@@ -411,11 +439,12 @@ describe('client shortcuts', () => {
   });
 
   // file
-  it.skip('should send file stream via http post multipart request', (done) => {
+  it('should send file stream via http post multipart request', (done) => {
     process.env.BASE_URL = 'https://127.0.0.1/v1/';
     const data = { name: 'image.png' };
     nock(process.env.BASE_URL)
       .post('/files')
+      .query(true)
       .reply(201, function onReply() {
         expect(this.req.headers).to.exist;
         expect(this.req.headers['content-type']).to.contain(

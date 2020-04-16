@@ -2,7 +2,12 @@ import http from 'http';
 import https from 'https';
 import { forEach, isEmpty, isFunction, startsWith, toLower } from 'lodash';
 import FormData from 'form-data';
-import { isNode, mergeObjects, assign } from '@lykmapipo/common';
+import {
+  isNode,
+  mergeObjects,
+  safeMergeObjects,
+  assign,
+} from '@lykmapipo/common';
 import { getString } from '@lykmapipo/env';
 
 export const CONTENT_TYPE = 'application/json';
@@ -29,7 +34,7 @@ export const RESPONSE_TYPE = 'json';
  */
 export const withDefaults = (optns) => {
   // merge defaults
-  const options = mergeObjects(
+  const options = safeMergeObjects(
     {
       baseURL: getString('BASE_URL') || getString('REACT_APP_BASE_URL'),
       headers: { Accept: CONTENT_TYPE, 'Content-Type': CONTENT_TYPE },
@@ -174,7 +179,10 @@ export const normalizeRequest = (request) => {
 
   // check for multipart
   const contentType = headers['content-type'] || headers['Content-Type'];
-  multipart = multipart || startsWith(toLower(contentType), 'multipart');
+  multipart =
+    multipart ||
+    startsWith(toLower(contentType), 'multipart') ||
+    isFormData(data);
 
   // check for multipart flag
   if (multipart) {
