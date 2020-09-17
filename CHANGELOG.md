@@ -1,3 +1,9 @@
+#### 0.5.0 (2020-09-17)
+
+##### Refactors
+
+*  ignore empty bodies on request ([89e5a357](https://github.com/lykmapipo/http-client/commit/89e5a357cfcecbeb00b6a7d8f707a03482e0625c))
+
 #### 0.4.19 (2020-09-10)
 
 ##### Chores

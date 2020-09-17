@@ -1,6 +1,6 @@
 import { forEach, isEmpty, startsWith, toLower, isFunction, omit } from 'lodash';
 import axios from 'axios';
-import { safeMergeObjects, isNode, mergeObjects, assign } from '@lykmapipo/common';
+import { safeMergeObjects, isNode, mergeObjects, isValue, assign } from '@lykmapipo/common';
 import http from 'http';
 import https from 'https';
 import FormData from 'form-data';
@@ -203,7 +203,7 @@ const normalizeRequest = (request) => {
 
   // update request
   request.headers = headers;
-  request.data = data;
+  request.data = isValue(data) ? data : undefined;
   request.responseType = responseType;
 
   // return normalize request
