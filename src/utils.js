@@ -4,6 +4,7 @@ import { forEach, isEmpty, isFunction, startsWith, toLower } from 'lodash';
 import FormData from 'form-data';
 import {
   isNode,
+  isValue,
   mergeObjects,
   safeMergeObjects,
   assign,
@@ -207,7 +208,7 @@ export const normalizeRequest = (request) => {
 
   // update request
   request.headers = headers;
-  request.data = data;
+  request.data = isValue(data) ? data : undefined;
   request.responseType = responseType;
 
   // return normalize request
