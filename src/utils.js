@@ -117,7 +117,7 @@ export const createAgents = (optns) => {
  * isFormData({});
  * // => false;
  *
- * * isFormData(new FormData());
+ * isFormData(new FormData());
  * // => true;
  */
 export const isFormData = (value) => {
