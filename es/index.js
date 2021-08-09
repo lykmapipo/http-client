@@ -112,7 +112,7 @@ const createAgents = (optns) => {
  * isFormData({});
  * // => false;
  *
- * * isFormData(new FormData());
+ * isFormData(new FormData());
  * // => true;
  */
 const isFormData = (value) => {
