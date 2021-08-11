@@ -1,6 +1,6 @@
 # http-client
 
-[![Build Status](https://travis-ci.org/lykmapipo/http-client.svg?branch=master)](https://travis-ci.org/lykmapipo/http-client)
+[![Build Status](https://travis-ci.com/lykmapipo/http-client.svg?branch=master)](https://travis-ci.com/lykmapipo/http-client)
 [![Dependencies Status](https://david-dm.org/lykmapipo/http-client.svg)](https://david-dm.org/lykmapipo/http-client)
 [![Coverage Status](https://coveralls.io/repos/github/lykmapipo/http-client/badge.svg?branch=master)](https://coveralls.io/github/lykmapipo/http-client?branch=master)
 [![GitHub License](https://img.shields.io/github/license/lykmapipo/http-client)](https://github.com/lykmapipo/http-client/blob/master/LICENSE) 
