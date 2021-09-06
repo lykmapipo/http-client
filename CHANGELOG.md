@@ -1,3 +1,9 @@
+#### 0.5.12 (2021-09-06)
+
+##### Documentation Changes
+
+* **readme:**  update build status to travis.com ([2c63ad4d](https://github.com/lykmapipo/http-client/commit/2c63ad4d62872f41e782e8bb77541e73e93a0869))
+
 #### 0.5.11 (2021-08-09)
 
 ##### Chores
